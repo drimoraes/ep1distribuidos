@@ -4,9 +4,10 @@ import pathlib
 import os
 
 
-# criando socket
+# criando sockets
+print("comecei")
 peer_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+print("antes tocket")
 IP, PORT = sys.argv[1].split(":")
 PORT = int(PORT)
 peer_socket.bind((IP, PORT))
