@@ -4,6 +4,8 @@ import sys
 import os
 from receiveHandler import HandlerReceive
 from sendHandler import SendReceive
+from PeerListHandler import PeerListHandler
+
 
 class Peer: 
     def __init__(self, enderecoTotal, arq, diretorio):
@@ -13,10 +15,10 @@ class Peer:
         print(f"IP: {self.ip}, PORT: {self.porta}")  # Verificando IP e PORT
         self.arquivo = arq
         self.peerdir = diretorio
-        receive = HandlerReceive(self, self.clock)  
-        send = SendReceive(self.ip, self.porta)      
+        self.receive = HandlerReceive(self, self.clock)  
+        self.send = SendReceive(self.ip, self.porta)      
+        self.peers_handler = PeerListHandler() 
         self.verificaDir(self.peerdir)
-        self.carregarPeers(arq) # essa funcao deve usar o bgl de abrir arquivos
         self.criasocket(self.ip, self.porta)
         self.escutar(self.socket)
         
@@ -25,10 +27,21 @@ class Peer:
             print("Erro: O diretório não existe ou não tem permissão de leitura.")
             sys.exit(1)
             
-    def carregarPeers(self, arqpeers):
-        print("ok")
-        
+    def carregar_peers(self, arq):
+        self.peers_handler.carrega_peers(arq)
+
+    def atualizar_status_peer(self, peer, novo_status):
+        self.peers_handler.atualizar_status(peer, novo_status)
+
+    def adicionar_novo_peer(self, peer):
+        self.peers_handler.adicionar_peer(peer)
+
+    def buscar_peer(self, peer):
+        return self.peers_handler.busca_peer(peer)
+             
+
     def criasocket(self, ip, porta):
+        #chat sugeriu colocar apenas self.escutar()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.bind((ip, porta))
         print(f"Socket criado e vinculado a {ip}:{porta}")
@@ -48,7 +61,3 @@ class Peer:
     def getPorta(self):
         return self.porta
     
-    def atualizarStatus(self, peer_destino, status):
-        
-        print(f"Atualizando peer {peer_destino} status {status}")
-        self.peers[peer_destino] = status
