@@ -1,11 +1,34 @@
 import socket
 import sys
 import os
+from receiveHandler import HandlerReceive
+from sendHandler import SendReceive
 
+class Peer: 
+    def __init__(self, enderecoTotal, arq, diretorio):
+        self.ip, self.porta = enderecoTotal.split(":")
+        self.arquivo = arq
+        self.peerdir = diretorio
+        receive = HandlerReceive(self.ip, self.porta)  
+        send = SendReceive(self.ip, self.porta)      
+        self.verificaDir(self.peerdir)
+        self.carregarPeers(arq) # essa funcao deve usar o bgl de abrir arquivos
+        self.criasocket(self.ip, self.porta)
+        
+    def verificaDir(dir):
+        if not (os.path.isdir(dir) and os.access(dir, os.R_OK)):
+            print("Erro: O diretório não existe ou não tem permissão de leitura.", flush=True)
+            sys.exit(1)
+            
+    def carregarPeers(arqpeers):
+        
+    def criasocket(self.ip, self.porta):
+        
+        
+        
+        
 # Verificando argumentos
-if len(sys.argv) < 3:
-    print("Uso correto: script.py <IP:PORT> <diretório>", flush=True)
-    sys.exit(1)
+
 
 # Criando socket
 peer_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

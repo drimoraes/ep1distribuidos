@@ -2,10 +2,14 @@ import socket, pickle
 import sys
 import pathlib
 import os
-
+import threading
 
 # criando sockets
-print("comecei")
+if len(sys.argv) < 3:
+    print("Uso correto: script.py <IP:PORT> <diretório>", flush=True)
+    sys.exit(1)
+# chamar o peer
+
 peer_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print("antes tocket")
 IP, PORT = sys.argv[1].split(":")
