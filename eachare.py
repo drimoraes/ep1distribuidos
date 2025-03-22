@@ -3,6 +3,7 @@ import sys
 import pathlib
 import os
 import threading
+from peer import Peer
 
 # criando sockets
 if len(sys.argv) < 3:
@@ -10,17 +11,14 @@ if len(sys.argv) < 3:
     sys.exit(1)
 # chamar o peer
 
-peer_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-print("antes tocket")
-IP, PORT = sys.argv[1].split(":")
-PORT = int(PORT)
-peer_socket.bind((IP, PORT))
-print("socket ok")
-# verificando diretorio
-dir = sys.argv[2]
-if not (os.path.isdir(dir) and os.access(dir, os.R_OK)):
-    sys.exit(1)
+IP, PORTA = sys.argv[1].split(":")
+PORTA = int(PORTA)
+arquivo = sys.argv[2]
+dir = sys.argv[3]
+
+peer = Peer(IP, PORTA, arquivo, dir)
+
     
-print("verificação ok")
 print("Escolha um comando: \n [1] Listar peers \n [2] Obter peers \n [3] Listar arquivos locais \n [4] Buscar arquivos \n [5] Exibir estatisticas \n [6] Alterar tamanho de chunk \n [9] Sair")
-peer_socket.listen(4)
+
+peer.execcomando(1)
