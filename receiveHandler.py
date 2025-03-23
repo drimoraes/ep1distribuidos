@@ -1,4 +1,5 @@
 import threading
+import re
 
 class HandlerReceive:
     def __init__(self, peer):
@@ -49,6 +50,12 @@ class HandlerReceive:
         # Lógica para lidar com LIST_FILES
 
     def processarMensagem(self, data_str):
-            # fazer
+        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s+(.*)", data_str)
+
+        if match:
+            origem = match.group(1)
+            clock = match.group(2)
+            tipo = match.group(3)
+            argumentos = match.group(4).split()
         
-       #return origem, clock, tipo, argumentos
+        return origem, clock, tipo, argumentos

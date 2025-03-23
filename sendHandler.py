@@ -2,6 +2,7 @@ import socket
 import threading
 import sys
 import os
+from message import Message
 
 class HandlerSend:
     def _init_(self, peers, clock):

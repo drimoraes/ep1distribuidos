@@ -3,24 +3,25 @@ import threading
 import sys
 import os
 from receiveHandler import HandlerReceive
-from sendHandler import SendReceive
+from sendHandler import HandlerSend
 from PeerListHandler import PeerListHandler
 
 
 class Peer: 
-    def __init__(self, enderecoTotal, arq, diretorio):
+    def __init__(self, enderecoTotal, arquivotxt, diretorio):
         self.ip, self.porta = enderecoTotal.split(":")
         self.porta = int(self.porta)
         self.clock = 0
         print(f"IP: {self.ip}, PORT: {self.porta}")  # Verificando IP e PORT
-        self.arquivo = arq
+        self.arquivo = arquivotxt
         self.peerdir = diretorio
         self.receive = HandlerReceive(self, self.clock)  
-        self.send = SendReceive(self.ip, self.porta)      
+        self.send = HandlerSend(self.ip, self.porta)      
         self.peers_handler = PeerListHandler() 
         self.verificaDir(self.peerdir)
         self.criasocket(self.ip, self.porta)
         self.escutar(self.socket)
+        self.carregar_peers(self, arquivotxt)
         
     def verificaDir(self, dir):
         if not (os.path.isdir(dir) and os.access(dir, os.R_OK)):

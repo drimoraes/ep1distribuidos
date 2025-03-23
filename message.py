@@ -7,9 +7,7 @@ class Message:
 
     @staticmethod
     def criarHello(remetente, destinatario, clock):
-        """Cria uma mensagem do tipo HELLO."""
         return Message(remetente, destinatario, "HELLO", clock)
 
     def gerarMensagem(self):
-        """Gera a mensagem em formato de string para envio."""
         return f"HELLO {self.remetente} {self.destinatario} {self.clock}"
