@@ -2,16 +2,19 @@ import threading
 import re
 
 class HandlerReceive:
-    def __init__(self, peer):
+    def __init__(self, peer: "Peer"):
         self.peer = peer
 
     def escutar(self):
-        self.peer.socket.listen(4)
+        # Usa o socket de escuta criado na classe Peer
+        self.peer.socket_listen.listen(4)  # Inicia a escuta para até 4 conexões simultâneas
         print("Escutando por conexões...")
 
         while True:
-            conn, addr = self.peer.socket.accept()
-            print(f"Conexão recebida de {addr}")
+            # Aceita conexões de clientes
+            conn, addr = self.peer.socket_listen.accept()  # Espera uma nova conexão
+            #print(f"Conexão recebida de {addr}")
+            # Cria uma nova thread para tratar a requisição
             threading.Thread(target=self.tratarReq, args=(conn, addr), daemon=True).start()
 
     def tratarReq(self, conn, addr):
@@ -39,6 +42,8 @@ class HandlerReceive:
         print(f"Mensagem recebida: {origem}, {clock}, HELLO")
         self.peer.attClock()
         print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
+        print(">")
         # Adiciona quem mandou na lista de status online
 
     def handleGetPeers(self, origem, clock):
@@ -50,12 +55,17 @@ class HandlerReceive:
         # Lógica para lidar com LIST_FILES
 
     def processarMensagem(self, data_str):
-        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s+(.*)", data_str)
+        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s*(.*)", data_str)
 
         if match:
             origem = match.group(1)
             clock = match.group(2)
             tipo = match.group(3)
-            argumentos = match.group(4).split()
-        
-        return origem, clock, tipo, argumentos
+            argumentos = match.group(4).split() if match.group(4) else []  # Se não houver argumentos, retorna lista vazia
+            
+            return origem, clock, tipo, argumentos
+        else:
+            # Se a correspondência falhar, retornamos None para os valores
+            print("Erro: formato de mensagem inválido.")
+            return None, None, None, None
+
