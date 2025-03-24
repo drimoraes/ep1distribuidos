@@ -55,25 +55,16 @@ class Message:
     @staticmethod
     def mensagemPeerList(remetente, destinatario, clock, conn):
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST" para {destinatario}')
-
-        #if socket_envio:
+    
         mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {remetente.tam_lista() - 1} {remetente.lista_peersStatus(remetente.getIpPorta())}"
-
+    
         try:
-            conn.sendall(mensagem.encode())  # Envia a mensagem codificada
-
-            
-                
-                #if remetente.buscar_peerIP(destinatario):
-                #   remetente.atualizar_status_peer(destinatario, "ONLINE")
-                #else:
-                #   remetente.adicionar_novo_peer(destinatario)
-
+            conn.sendall(mensagem.encode())  # Usar `conn`, não criar um novo socket
         except Exception as e:
             print(f"Erro ao enviar mensagem para {destinatario}: {e}")
             remetente.atualizar_status_peer(destinatario, "OFFLINE")
         finally:
-            conn.close()  # Fecha o socket após o envio
+            conn.close() 
     
     @staticmethod        
     def processarMensagem(data_str):

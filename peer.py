@@ -49,8 +49,8 @@ class Peer:
     def tam_lista(self):
         return self.peerslist_handler.tamanho_lista()
     
-    def lista_peersStatus(self):
-        return self.peerslist_handler.lista_peersStatus()
+    def lista_peersStatus(self, peerExcluido):
+        return self.peerslist_handler.lista_peersStatus(peerExcluido)
              
 
     def criar_socket_escuta(self):

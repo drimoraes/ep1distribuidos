@@ -30,7 +30,7 @@ class HandlerReceive:
             if tipo == "HELLO":
                 self.handleHello(origem, clock)
             elif tipo == "GET_PEERS":
-                self.handleGetPeers(origem, self.peer.socket_listen, clock)
+                self.handleGetPeers(self.peer.socket_listen, origem, clock)
             elif tipo == "LIST_FILES":
                 self.handleListFiles(origem, clock)
             else:
