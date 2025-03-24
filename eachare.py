@@ -22,9 +22,9 @@ while True:
     escolha = input("> ")
     escolha = int(escolha)
     if escolha == 1:
-        peer.ListarPeers()
+        peer.listarPeers()
     if escolha == 2:
-        peer.ObterPeers()
+        peer.obterPeers()
     if escolha == 3:
-        peer.ListarArqLoc()
+        peer.listarArqLoc()
 

@@ -42,6 +42,9 @@ class Peer:
 
     def buscar_peer(self, peer):
         return self.peerslist_handler.busca_peer(peer)
+    
+    def buscar_peerIP(self, peer):
+        return self.peerslist_handler.busca_peerIP(peer)
              
 
     def criar_socket_escuta(self):
@@ -85,13 +88,13 @@ class Peer:
     def getIpPorta(self):
         return f"{self.getIP()}:{self.getPorta()}"
 
-    def ListarPeers(self):
+    def listarPeers(self):
         self.send.listarPeers()
 
-    def ObterPeers(self):
-        print("teste2")
+    def obterPeers(self):
+        self.send.obterPeers()
         
-    def ListarArqLoc(self):
+    def listarArqLoc(self):
         arquivos = os.listdir(self.peerdir)
         arquivos_formatados = []
         for arquivo in arquivos:

@@ -1,5 +1,6 @@
 import threading
 import re
+from message import Message
 
 class HandlerReceive:
     def __init__(self, peer: "Peer"):
@@ -23,7 +24,7 @@ class HandlerReceive:
 
         try:
             data_str = data.decode('utf-8')  # Decodifica os dados para string
-            origem, clock, tipo, argumentos = self.processarMensagem(data_str)
+            origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
 
             # Executa diferentes lógicas dependendo do TIPO
             if tipo == "HELLO":
@@ -54,18 +55,18 @@ class HandlerReceive:
         print(f"Mensagem recebida: {origem}, {clock}, LIST_FILES")
         # Lógica para lidar com LIST_FILES
 
-    def processarMensagem(self, data_str):
-        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s*(.*)", data_str)
+#    def processarMensagem(self, data_str):
+#        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s*(.*)", data_str)
 
-        if match:
-            origem = match.group(1)
-            clock = match.group(2)
-            tipo = match.group(3)
-            argumentos = match.group(4).split() if match.group(4) else []  # Se não houver argumentos, retorna lista vazia
+        #if match:
+         #   origem = match.group(1)
+          #  clock = match.group(2)
+          #  tipo = match.group(3)
+          #  argumentos = match.group(4).split() if match.group(4) else []  # Se não houver argumentos, retorna lista vazia
             
-            return origem, clock, tipo, argumentos
-        else:
+          #  return origem, clock, tipo, argumentos
+        #else:
             # Se a correspondência falhar, retornamos None para os valores
-            print("Erro: formato de mensagem inválido.")
-            return None, None, None, None
+         #   print("Erro: formato de mensagem inválido.")
+          #  return None, None, None, None
 

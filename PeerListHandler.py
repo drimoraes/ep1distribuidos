@@ -43,13 +43,20 @@ class PeerListHandler:
         self.peerslist["ONLINE"].append(peer)  # Adiciona o peer como ONLINE
         print(f"Adicionando novo peer {peer} status ONLINE")
 
-    def busca_peer(self, peer):
+    #def busca_peer(self, peer):
+    #    """Busca um peer específico (IP:PORTA) e retorna o IP e a porta separadamente."""
+    #    for status in ["ONLINE", "OFFLINE"]:
+    #        if peer in self.peerslist[status]:  
+    #            ip, porta = peer.split(":")  
+    #            return ip, porta  
+    #    return ("", "")  # ✅ Retorna strings vazias em vez de None
+    
+    def busca_peerIP(self, dest):
         """Busca um peer específico (IP:PORTA) e retorna o IP e a porta separadamente."""
         for status in ["ONLINE", "OFFLINE"]:
-            if peer in self.peerslist[status]:  
-                ip, porta = peer.split(":")  
-                return ip, porta  
-        return ("", "")  # ✅ Retorna strings vazias em vez de None
+            if dest in self.peerslist[status]:   
+                return True  
+        return False 
  
     def listar_peers(self):
         """Lista todos os peers primeiro OFFLINE, depois ONLINE, com um índice numérico."""
@@ -58,20 +65,4 @@ class PeerListHandler:
             for peer in self.peerslist[status]:  
                 print(f"[{index}] {peer} {status}")  
                 index += 1  # Incrementa o contador
-
-
-
-
-    # Criando um objeto da classe PeerListHandler
-#handler = PeerListHandler()
-
-# Adicionando peers manualmente para testar
-#handler.adicionar_peer("127.0.0.1:9002")  # Deve entrar como ONLINE
-#handler.adicionar_peer("192.168.1.1:8080")  # Deve entrar como ONLINE
-
-# Atualizando o status de um peer para OFFLINE
-#handler.atualizar_status("127.0.0.1:9002", "OFFLINE")
-
-# Chamando o método listar_peers()
-#print("\nLista de Peers:")
-#handler.listar_peers()
+                

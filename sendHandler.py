@@ -31,8 +31,10 @@ class HandlerSend:
                     print("Opção inválida!")
             except ValueError:
                 print("Opção inválida! Por favor, escolha um número.")
+                
+#    def obterPeers(self):
+#        for status in ["OFFLINE", "ONLINE"]:  # Primeiro OFFLINE, depois ONLINE
+#            for peer in self.peer.peerslist[status]:  
+                
 
-
- 
-
-        
+    
