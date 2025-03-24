@@ -66,3 +66,18 @@ class PeerListHandler:
                 print(f"[{index}] {peer} {status}")  
                 index += 1  # Incrementa o contador
                 
+    def lista_peersStatus(self, excluir_peer):
+        """Retorna uma string com todos os peers no formato <endereço>:<porta>:<status>:0 separados por espaço, exceto o peer especificado."""
+        peers_formatados = []
+
+        for status in ["OFFLINE", "ONLINE"]:
+            for peer in self.peerslist[status]:
+                if peer != excluir_peer:  # Exclui o peer especificado
+                    peers_formatados.append(f"{peer}:{status}:0")
+
+        return " ".join(peers_formatados)
+                
+    def tamanho_lista(self):
+        """Retorna o número total de peers (ONLINE + OFFLINE)."""
+        return len(self.peerslist["ONLINE"]) + len(self.peerslist["OFFLINE"])
+                

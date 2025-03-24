@@ -45,6 +45,12 @@ class Peer:
     
     def buscar_peerIP(self, peer):
         return self.peerslist_handler.busca_peerIP(peer)
+    
+    def tam_lista(self):
+        return self.peerslist_handler.tamanho_lista()
+    
+    def lista_peersStatus(self):
+        return self.peerslist_handler.lista_peersStatus()
              
 
     def criar_socket_escuta(self):

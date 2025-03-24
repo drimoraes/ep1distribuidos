@@ -30,7 +30,7 @@ class HandlerReceive:
             if tipo == "HELLO":
                 self.handleHello(origem, clock)
             elif tipo == "GET_PEERS":
-                self.handleGetPeers(origem, clock)
+                self.handleGetPeers(origem, self.peer.socket_listen, clock)
             elif tipo == "LIST_FILES":
                 self.handleListFiles(origem, clock)
             else:
@@ -40,16 +40,20 @@ class HandlerReceive:
             print(f"Erro ao processar mensagem: {e}")
 
     def handleHello(self, origem, clock):
-        print(f"Mensagem recebida: {origem}, {clock}, HELLO")
+        print(f"Mensagem recebida: {origem} {clock} HELLO")
         self.peer.attClock()
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
         print(">")
         # Adiciona quem mandou na lista de status online
 
-    def handleGetPeers(self, origem, clock):
-        print(f"Mensagem recebida: {origem}, {clock}, GET_PEERS")
-        # Lógica para lidar com GET_PEERS
+    def handleGetPeers(self, conn, origem, clock):
+        print(f"Mensagem recebida: {origem} {clock} GET_PEERS")
+        self.peer.attClock()
+        print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
+        Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
+
 
     def handleListFiles(self, origem, clock):
         print(f"Mensagem recebida: {origem}, {clock}, LIST_FILES")

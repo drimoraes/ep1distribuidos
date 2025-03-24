@@ -32,9 +32,13 @@ class HandlerSend:
             except ValueError:
                 print("Opção inválida! Por favor, escolha um número.")
                 
-#    def obterPeers(self):
-#        for status in ["OFFLINE", "ONLINE"]:  # Primeiro OFFLINE, depois ONLINE
-#            for peer in self.peer.peerslist[status]:  
+    def obterPeers(self):
+        for status in ["OFFLINE", "ONLINE"]:  # Primeiro OFFLINE, depois ONLINE
+            for peerDest in self.peer.peerslist[status]: 
+                self.peer.attClock()
+                clock = self.peer.getClock()
+                print (f"Atualizando relógio para: {clock}")
+                Message.mensagemGetPeers(self.peer, peerDest, clock)
                 
 
     
