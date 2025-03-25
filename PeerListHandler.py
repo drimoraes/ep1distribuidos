@@ -35,14 +35,14 @@ class PeerListHandler:
         else:
             print(f"Erro: O peer {peer} não está na lista {status_antigo}, não pode ser movido.")
 
-    def adicionar_peer(self, peer):
+    def adicionar_peer(self, peer, status):
         """Adiciona um novo peer na lista com status ONLINE."""
         if peer in self.peerslist["ONLINE"] or peer in self.peerslist["OFFLINE"]:
             print(f"Erro: O peer {peer} já existe na lista.")
             return
 
-        self.peerslist["ONLINE"].append(peer)  # Adiciona o peer como ONLINE
-        print(f"Adicionando novo peer {peer} status ONLINE")
+        self.peerslist[status].append(peer)  # Adiciona o peer como ONLINE
+        print(f"Adicionando novo peer {peer} status {status}")
 
     #def busca_peer(self, peer):
     #    """Busca um peer específico (IP:PORTA) e retorna o IP e a porta separadamente."""
@@ -75,7 +75,7 @@ class PeerListHandler:
             for peer in self.peerslist[status]:
                 if peer != excluir_peer:  # Exclui o peer especificado
                     peers_formatados.append(f"{peer}:{status}:0")
-
+        print(" ".join(peers_formatados))
         return " ".join(peers_formatados)
                 
     def tamanho_lista(self):

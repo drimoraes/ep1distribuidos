@@ -37,8 +37,8 @@ class Peer:
     def atualizar_status_peer(self, peer, novo_status):
         self.peerslist_handler.atualizar_status(peer, novo_status)
 
-    def adicionar_novo_peer(self, peer):
-        self.peerslist_handler.adicionar_peer(peer)
+    def adicionar_novo_peer(self, peer, status):
+        self.peerslist_handler.adicionar_peer(peer, status)
 
     def buscar_peer(self, peer):
         return self.peerslist_handler.busca_peer(peer)

@@ -52,8 +52,7 @@ class Message:
     def mensagemPeerList(remetente, destinatario, clock, conn, arg):
         print(arg)
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST" para {destinatario}')
-        print("entrei em resposta")
-        mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {remetente.tam_lista() - 1} {remetente.lista_peersStatus(remetente.getIpPorta())}"
+        mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {remetente.tam_lista() - 1} {remetente.lista_peersStatus(destinatario)}"
     
         try:
             print("entrei no try")

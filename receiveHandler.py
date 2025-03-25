@@ -57,11 +57,16 @@ class HandlerReceive:
     def handlePeersList(self, conn):
         data = conn.recv(1024).decode()
         origem, clock, tipo, argumentos = Message.processarMensagem(data)
+        print(f"argumentos {argumentos}")
         print(f"Mensagem recebida: {origem} {clock} {tipo}")
         self.peer.attClock()
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
-        print("recebi a resposta")
+        for peer in range(1, (int(argumentos[0]) + 1)):
+            ip, porta, status,num = argumentos[peer].split(':')
+            peerAdd = ip + ':' + porta
+            self.peer.adicionar_novo_peer(peerAdd, status)
+            
 
 
     def handleListFiles(self, origem, clock):
