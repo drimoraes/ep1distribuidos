@@ -39,7 +39,8 @@ class HandlerSend:
                 clock = self.peer.getClock()
                 print (f"Atualizando relógio para: {clock}")
                 connection_socket = Message.mensagemGetPeers(self.peer, peerDest, clock)
-                self.peer.handlePeersList(connection_socket, self.peer, clock)
+                if connection_socket:  # Garante que a conexão foi criada
+                    self.peer.handlePeersList(connection_socket)
                 
 
     

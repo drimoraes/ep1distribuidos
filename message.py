@@ -1,4 +1,4 @@
-import re
+import re 
 
 class Message:
 
@@ -28,7 +28,8 @@ class Message:
         #if socket_envio:
         mensagem = f"{remetente.getIpPorta()} {clock} GET_PEERS"
         try:
-            socket_envio.send(mensagem.encode())  # Envia a mensagem codificada
+            socket_envio.send(mensagem.encode())
+            return socket_envio  # Envia a mensagem codificada
             #socket_envio.listen(1)
             #conn, addr = socket_envio.accept()
             #data = conn.recv(1024)
@@ -48,16 +49,18 @@ class Message:
 
             
     @staticmethod
-    def mensagemPeerList(remetente, destinatario, clock, conn):
+    def mensagemPeerList(remetente, destinatario, clock, conn, arg):
+        print(arg)
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST" para {destinatario}')
-    
+        print("entrei em resposta")
         mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {remetente.tam_lista() - 1} {remetente.lista_peersStatus(remetente.getIpPorta())}"
     
         try:
+            print("entrei no try")
             conn.sendall(mensagem.encode())  # Usar `conn`, não criar um novo socket
         except Exception as e:
             print(f"Erro ao enviar mensagem para {destinatario}: {e}")
-            remetente.atualizar_status_peer(destinatario, "OFFLINE")
+        #    remetente.atualizar_status_peer(destinatario, "OFFLINE")
         finally:
             conn.close() 
     

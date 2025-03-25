@@ -1,4 +1,4 @@
-
+import sys
 
 class PeerListHandler:
     """Gerencia a lista de peers (ONLINE e OFFLINE)."""
@@ -18,6 +18,7 @@ class PeerListHandler:
 
         except FileNotFoundError:
             print(f"Erro: O arquivo {arquivo} não foi encontrado.")
+            sys.exit(1)
 
     def atualizar_status(self, peer, novo_status):
         """Atualiza o status de um peer (move entre ONLINE e OFFLINE)."""

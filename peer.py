@@ -100,8 +100,8 @@ class Peer:
     def obterPeers(self):
         self.send.obterPeers()
         
-    def esperarPeerList(self):
-        self.receive.esperarPeerList()
+    def handlePeersList(self, connecSocket):
+        self.receive.handlePeersList(connecSocket)
         
     def listarArqLoc(self):
         arquivos = os.listdir(self.peerdir)
