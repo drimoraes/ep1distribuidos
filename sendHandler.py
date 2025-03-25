@@ -33,12 +33,13 @@ class HandlerSend:
                 print("Opção inválida! Por favor, escolha um número.")
                 
     def obterPeers(self):
-        for status in ["OFFLINE", "ONLINE"]:  # Primeiro OFFLINE, depois ONLINE
+        for status in ["OFFLINE", "ONLINE"]:  
             for peerDest in self.peer.peerslist[status]: 
                 self.peer.attClock()
                 clock = self.peer.getClock()
                 print (f"Atualizando relógio para: {clock}")
-                Message.mensagemGetPeers(self.peer, peerDest, clock)
+                connection_socket = Message.mensagemGetPeers(self.peer, peerDest, clock)
+                self.peer.handlePeersList(connection_socket, self.peer, clock)
                 
 
     

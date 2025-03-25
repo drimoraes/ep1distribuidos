@@ -29,11 +29,11 @@ class Message:
         mensagem = f"{remetente.getIpPorta()} {clock} GET_PEERS"
         try:
             socket_envio.send(mensagem.encode())  # Envia a mensagem codificada
-            socket_envio.listen(1)
-            conn, addr = socket_envio.accept()
-            data = conn.recv(1024)
-            data_str = data.decode('utf-8')  # Decodifica os dados para string
-            origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
+            #socket_envio.listen(1)
+            #conn, addr = socket_envio.accept()
+            #data = conn.recv(1024)
+            #data_str = data.decode('utf-8')  # Decodifica os dados para string
+            #origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
             
                 
                 #if remetente.buscar_peerIP(destinatario):
@@ -44,8 +44,8 @@ class Message:
         except Exception as e:
             print(f"Erro ao enviar mensagem para {destinatario}: {e}")
             remetente.atualizar_status_peer(destinatario, "OFFLINE")
-        finally:
-            socket_envio.close()  # Fecha o socket após o envio
+            
+
             
     @staticmethod
     def mensagemPeerList(remetente, destinatario, clock, conn):
@@ -69,10 +69,9 @@ class Message:
             origem = match.group(1)
             clock = match.group(2)
             tipo = match.group(3)
-            argumentos = match.group(4).split() if match.group(4) else []  # Se não houver argumentos, retorna lista vazia
+            argumentos = match.group(4).split() if match.group(4) else []
             
             return origem, clock, tipo, argumentos
         else:
-            # Se a correspondência falhar, retornamos None para os valores
             print("Erro: formato de mensagem inválido.")
             return None, None, None, None

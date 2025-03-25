@@ -100,6 +100,9 @@ class Peer:
     def obterPeers(self):
         self.send.obterPeers()
         
+    def esperarPeerList(self):
+        self.receive.esperarPeerList()
+        
     def listarArqLoc(self):
         arquivos = os.listdir(self.peerdir)
         arquivos_formatados = []

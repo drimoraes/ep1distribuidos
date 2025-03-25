@@ -47,12 +47,19 @@ class HandlerReceive:
         print(">")
         # Adiciona quem mandou na lista de status online
 
-    def handleGetPeers(self, conn, origem, clock):
+    def handleGetPeers(self, origem, clock):
         print(f"Mensagem recebida: {origem} {clock} GET_PEERS")
         self.peer.attClock()
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
-        Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
+        #Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
+        
+    def handlePeersList(self, conn, origem, clock):
+        print(f"Mensagem recebida: {origem} {clock} PEER_LIST")
+        self.peer.attClock()
+        print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
+        #Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
 
 
     def handleListFiles(self, origem, clock):
