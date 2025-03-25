@@ -1,11 +1,6 @@
 import re
 
 class Message:
-    def __init__(self, remetente, destinatario, tipo, clock):
-        self.remetente = remetente
-        self.destinatario = destinatario
-        self.tipo = tipo
-        self.clock = clock
 
     @staticmethod
     def mensagemHello(remetente, destinatario, clock):
