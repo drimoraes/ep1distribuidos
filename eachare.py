@@ -27,4 +27,7 @@ while True:
         peer.obterPeers()
     if escolha == 3:
         peer.listarArqLoc()
+    if escolha == 9:
+        peer.sair()
+
 

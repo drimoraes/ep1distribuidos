@@ -111,4 +111,7 @@ class Peer:
 
         for arquivo in arquivos_formatados:
             print(arquivo)
+
+    def sair(self):
+        self.send.sair()
     

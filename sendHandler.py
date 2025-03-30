@@ -41,6 +41,9 @@ class HandlerSend:
                 connection_socket = Message.mensagemGetPeers(self.peer, peerDest, clock)
                 if connection_socket:  # Garante que a conexão foi criada
                     self.peer.handlePeersList(connection_socket)
+
+    #def sair(self):
+
                 
 
     
