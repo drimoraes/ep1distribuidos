@@ -19,7 +19,7 @@ class HandlerSend:
             try:
                 escolha = int(escolha) - 1  # Ajusta o índice para começar do 0
                 # Criamos uma lista ordenada contendo apenas os peers (chaves IP:PORTA)
-                lista_peers = list(self.peer.peerslist_handler.peerslist["OFFLINE"] + self.peer.peerslist_handler.peerslist["ONLINE"] )
+                lista_peers = list(self.peer.peerslist["OFFLINE"] + self.peer.peerslist["ONLINE"] )
 
                 if 0 <= escolha < len(lista_peers):
                     destinatario = lista_peers[escolha]  # Obtém o IP:PORTA correspondente
@@ -42,7 +42,18 @@ class HandlerSend:
                 if connection_socket:  # Garante que a conexão foi criada
                     self.peer.handlePeersList(connection_socket)
 
-    #def sair(self):
+    def sair(self):
+        print('Saindo...')
+        self.peer.attClock()
+        clock = self.peer.getClock()
+        print (f"=> Atualizando relógio para: {clock}")
+        for destinatario in self.peer.peerslist["ONLINE"]:  # Percorre apenas a lista ONLINE
+            Message.mensagemBye(self.peer, destinatario, clock)
+        self.peer.mataSockets()
+        print("Finalizando execução...")
+        sys.exit(0) 
+        
+
 
                 
 

@@ -1,6 +1,8 @@
 import threading
 import re 
+import sys
 from message import Message
+
 
 class HandlerReceive:
     def __init__(self, peer: "Peer"):
@@ -33,6 +35,8 @@ class HandlerReceive:
                 self.handleGetPeers(conn, origem, clock, tipo, argumentos)
             elif tipo == "LIST_FILES":
                 self.handleListFiles(origem, clock)
+            elif tipo == "BYE":
+                self.handleBye(origem,clock)
             else:
                 print(f"Tipo {tipo} desconhecido.")
 
@@ -45,7 +49,15 @@ class HandlerReceive:
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
         print(">")
-        # Adiciona quem mandou na lista de status online
+    
+    def handleBye(self, origem, clock):
+        print(f"Mensagem recebida: {origem} {clock} BYE")
+        self.peer.attClock()
+        clock = self.peer.getClock()
+        print (f"=> Atualizando relógio para: {clock}")
+        self.peer.atualizar_status_peer(origem, "OFFLINE")
+        sys.exit(0) 
+        
 
     def handleGetPeers(self, conn, origem, clock, tipo, argumentos):
         print(f"Mensagem recebida: {origem} {clock} {tipo}")

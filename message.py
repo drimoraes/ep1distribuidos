@@ -20,6 +20,17 @@ class Message:
                 socket_envio.close()  # Fecha o socket após o envio
         else:
             remetente.atualizar_status_peer(destinatario, "OFFLINE")
+    
+    def mensagemBye(remetente, destinatario, clock):
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} BYE" para {destinatario}')
+        socket_envio = remetente.criar_socket_envio(destinatario)
+        mensagem = f"{remetente.getIpPorta()} {clock} BYE"
+        try:
+            socket_envio.send(mensagem.encode())
+        except Exception as e:
+            print(f"Erro ao enviar mensagem para {destinatario}: {e}")
+        
+
             
     @staticmethod
     def mensagemGetPeers(remetente, destinatario, clock):
@@ -62,6 +73,7 @@ class Message:
         #    remetente.atualizar_status_peer(destinatario, "OFFLINE")
         finally:
             conn.close() 
+
     
     @staticmethod        
     def processarMensagem(data_str):

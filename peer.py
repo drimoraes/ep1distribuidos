@@ -78,6 +78,12 @@ class Peer:
         
     def escutar(self):
         threading.Thread(target=self.receive.escutar, daemon=True).start()
+
+    def mataSockets(self):
+        if hasattr(self, "socket_listen") and self.socket_listen:
+            self.socket_listen.close()
+        if hasattr(self, "socket_send") and self.socket_send:
+            self.socket_send.close()
         
     def attClock(self):
         self.clock += 1
@@ -99,6 +105,9 @@ class Peer:
 
     def obterPeers(self):
         self.send.obterPeers()
+
+    def sair(self):
+        self.send.sair()
         
     def handlePeersList(self, connecSocket):
         self.receive.handlePeersList(connecSocket)
