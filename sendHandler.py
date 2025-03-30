@@ -56,8 +56,8 @@ class HandlerSend:
         print (f"=> Atualizando relógio para {clock}")
         for destinatario in self.peer.peerslist["ONLINE"]:  # Percorre apenas a lista ONLINE
             Message.mensagemBye(self.peer, destinatario, clock)
-        self.peer.mataSockets()
         print("Finalizando execução...")
+        self.peer.mataSockets()
         sys.exit(0) 
         
 
