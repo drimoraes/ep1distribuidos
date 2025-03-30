@@ -32,7 +32,7 @@ class HandlerReceive:
             if tipo == "HELLO":
                 self.handleHello(origem, clock)
             elif tipo == "GET_PEERS":
-                self.handleGetPeers(conn, origem, clock, tipo, argumentos)
+                self.handleGetPeers(conn, origem, clock, tipo)
             elif tipo == "LIST_FILES":
                 self.handleListFiles(origem, clock)
             elif tipo == "BYE":
@@ -58,19 +58,20 @@ class HandlerReceive:
         self.peer.atualizar_status_peer(origem, "OFFLINE")
         sys.exit(0) 
         
-
-    def handleGetPeers(self, conn, origem, clock, tipo, argumentos):
+ 
+    def handleGetPeers(self, conn, origem, clock, tipo):
         print(f"Mensagem recebida: {origem} {clock} {tipo}")
         self.peer.attClock()
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
-        Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn, argumentos)
+        Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
+        print(">")
         
     def handlePeersList(self, conn):
         data = conn.recv(1024).decode()
         origem, clock, tipo, argumentos = Message.processarMensagem(data)
-        print(f"argumentos {argumentos}")
-        print(f"Mensagem recebida: {origem} {clock} {tipo}")
+        #print(f"argumentos {argumentos}")
+        print(f"Resposta recebida: {origem} {clock} {tipo} {argumentos}")
         self.peer.attClock()
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
@@ -79,24 +80,4 @@ class HandlerReceive:
             peerAdd = ip + ':' + porta
             self.peer.adicionar_novo_peer(peerAdd, status)
             
-
-
-    def handleListFiles(self, origem, clock):
-        print(f"Mensagem recebida: {origem}, {clock}, LIST_FILES")
-        # Lógica para lidar com LIST_FILES
-
-#    def processarMensagem(self, data_str):
-#        match = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s*(.*)", data_str)
-
-        #if match:
-         #   origem = match.group(1)
-          #  clock = match.group(2)
-          #  tipo = match.group(3)
-          #  argumentos = match.group(4).split() if match.group(4) else []  # Se não houver argumentos, retorna lista vazia
-            
-          #  return origem, clock, tipo, argumentos
-        #else:
-            # Se a correspondência falhar, retornamos None para os valores
-         #   print("Erro: formato de mensagem inválido.")
-          #  return None, None, None, None
 

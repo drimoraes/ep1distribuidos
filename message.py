@@ -60,13 +60,11 @@ class Message:
 
             
     @staticmethod
-    def mensagemPeerList(remetente, destinatario, clock, conn, arg):
-        print(arg)
-        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST" para {destinatario}')
+    def mensagemPeerList(remetente, destinatario, clock, conn):
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST" para {destinatario} {remetente.tam_lista() - 1} {remetente.lista_peersStatus(destinatario)}')
         mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {remetente.tam_lista() - 1} {remetente.lista_peersStatus(destinatario)}"
     
         try:
-            print("entrei no try")
             conn.sendall(mensagem.encode())  # Usar `conn`, não criar um novo socket
         except Exception as e:
             print(f"Erro ao enviar mensagem para {destinatario}: {e}")

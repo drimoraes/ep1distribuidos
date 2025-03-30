@@ -26,7 +26,10 @@ class PeerListHandler:
             print("Erro: Status inválido. Use 'ONLINE' ou 'OFFLINE'.")
             return
         
-        status_antigo = "ONLINE" if novo_status == "OFFLINE" else "OFFLINE"  # Define o status anterior
+        if novo_status == "OFFLINE":
+            status_antigo = "ONLINE"
+        else:
+            status_antigo = "OFFLINE"
 
         if peer in self.peerslist[status_antigo]:  # Se o peer está no status antigo
             self.peerslist[status_antigo].remove(peer)  # Remove do status atual
@@ -75,7 +78,7 @@ class PeerListHandler:
             for peer in self.peerslist[status]:
                 if peer != excluir_peer:  # Exclui o peer especificado
                     peers_formatados.append(f"{peer}:{status}:0")
-        print(" ".join(peers_formatados))
+        #print(" ".join(peers_formatados))
         return " ".join(peers_formatados)
                 
     def tamanho_lista(self):

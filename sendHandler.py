@@ -25,7 +25,7 @@ class HandlerSend:
                     destinatario = lista_peers[escolha]  # Obtém o IP:PORTA correspondente
                     self.peer.attClock()
                     clock = self.peer.getClock()
-                    print (f"Atualizando relógio para: {clock}")
+                    print (f"Atualizando relógio para {clock}")
                     Message.mensagemHello(self.peer, destinatario, clock)
                 else:
                     print("Opção inválida!")
@@ -33,20 +33,27 @@ class HandlerSend:
                 print("Opção inválida! Por favor, escolha um número.")
                 
     def obterPeers(self):
-        for status in ["OFFLINE", "ONLINE"]:  
-            for peerDest in self.peer.peerslist[status]: 
+        enviados = []  # Lista para rastrear peers já contatados
+        for status in ["OFFLINE", "ONLINE"]:
+            for peerDest in self.peer.peerslist[status]:
+                if peerDest in enviados:
+                    continue  # Se já enviamos para este peer, ignoramos
+
                 self.peer.attClock()
                 clock = self.peer.getClock()
-                print (f"Atualizando relógio para: {clock}")
+                print(f"Atualizando relógio para {clock}")
+
                 connection_socket = Message.mensagemGetPeers(self.peer, peerDest, clock)
                 if connection_socket:  # Garante que a conexão foi criada
                     self.peer.handlePeersList(connection_socket)
+
+                enviados.append(peerDest)
 
     def sair(self):
         print('Saindo...')
         self.peer.attClock()
         clock = self.peer.getClock()
-        print (f"=> Atualizando relógio para: {clock}")
+        print (f"=> Atualizando relógio para {clock}")
         for destinatario in self.peer.peerslist["ONLINE"]:  # Percorre apenas a lista ONLINE
             Message.mensagemBye(self.peer, destinatario, clock)
         self.peer.mataSockets()
