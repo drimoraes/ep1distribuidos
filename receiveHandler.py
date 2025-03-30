@@ -56,7 +56,7 @@ class HandlerReceive:
         clock = self.peer.getClock()
         print (f"=> Atualizando relógio para: {clock}")
         self.peer.atualizar_status_peer(origem, "OFFLINE")
-        sys.exit(0) 
+        print(">")
         
  
     def handleGetPeers(self, conn, origem, clock, tipo):
@@ -70,8 +70,8 @@ class HandlerReceive:
     def handlePeersList(self, conn):
         data = conn.recv(1024).decode()
         origem, clock, tipo, argumentos = Message.processarMensagem(data)
-        #print(f"argumentos {argumentos}")
-        print(f"Resposta recebida: {origem} {clock} {tipo} {argumentos}")
+        arg_formatados = ' '.join(argumentos)
+        print(f"Resposta recebida: {origem} {clock} {tipo} {arg_formatados}")
         self.peer.attClock()
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
