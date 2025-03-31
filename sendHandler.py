@@ -17,12 +17,12 @@ class HandlerSend:
             print("Voltando para o menu...")
         else:
             try:
-                escolha = int(escolha) - 1  # Ajusta o índice para começar do 0
-                # Criamos uma lista ordenada contendo apenas os peers (chaves IP:PORTA)
+                escolha = int(escolha) - 1 
+
                 lista_peers = list(self.peer.peerslist["OFFLINE"] + self.peer.peerslist["ONLINE"] )
 
                 if 0 <= escolha < len(lista_peers):
-                    destinatario = lista_peers[escolha]  # Obtém o IP:PORTA correspondente
+                    destinatario = lista_peers[escolha]  
                     self.peer.attClock()
                     clock = self.peer.getClock()
                     print (f"Atualizando relógio para {clock}")
@@ -33,18 +33,18 @@ class HandlerSend:
                 print("Opção inválida! Por favor, escolha um número.")
                 
     def obterPeers(self):
-        enviados = []  # Lista para rastrear peers já contatados
+        enviados = []  # Foi necessário adicionar ess estrutura auxiliar para não enviar a mensagem repetidas vezes
         for status in ["OFFLINE", "ONLINE"]:
             for peerDest in self.peer.peerslist[status]:
                 if peerDest in enviados:
-                    continue  # Se já enviamos para este peer, ignoramos
+                    continue
 
                 self.peer.attClock()
                 clock = self.peer.getClock()
                 print(f"Atualizando relógio para {clock}")
 
                 connection_socket = Message.mensagemGetPeers(self.peer, peerDest, clock)
-                if connection_socket:  # Garante que a conexão foi criada
+                if connection_socket: 
                     self.peer.handlePeersList(connection_socket)
 
                 enviados.append(peerDest)
@@ -54,7 +54,7 @@ class HandlerSend:
         self.peer.attClock()
         clock = self.peer.getClock()
         print (f"=> Atualizando relógio para {clock}")
-        for destinatario in self.peer.peerslist["ONLINE"]:  # Percorre apenas a lista ONLINE
+        for destinatario in self.peer.peerslist["ONLINE"]: 
             Message.mensagemBye(self.peer, destinatario, clock)
         print("Finalizando execução...")
         self.peer.mataSockets()

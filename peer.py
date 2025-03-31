@@ -12,7 +12,6 @@ class Peer:
         self.ip, self.porta = enderecoTotal.split(":")
         self.porta = int(self.porta)
         self.clock = 0
-        #print(f"IP: {self.ip}, PORT: {self.porta}")  # Verificando IP e PORT
         self.arquivo = arquivotxt
         self.peerdir = diretorio
         self.receive = HandlerReceive(self)  
@@ -25,12 +24,13 @@ class Peer:
         self.escutar()
         self.carregar_peers(arquivotxt)
         
-
+    # Verifica se o diretório é valido
     def verificaDir(self, dir):
         if not (os.path.isdir(dir) and os.access(dir, os.R_OK)):
             print("Erro: O diretório não existe ou não tem permissão de leitura.")
             sys.exit(1)
-            
+    
+    # Manipulação da lista de peers conhecidos usando o objeto da classe PeerListHandler encapsulado 
     def carregar_peers(self, arq):
         self.peerslist_handler.carrega_peers(arq)
 
@@ -52,13 +52,12 @@ class Peer:
     def lista_peersStatus(self, peerExcluido):
         return self.peerslist_handler.lista_peersStatus(peerExcluido)
              
-
+    # Cria sockets para escutar comandos e enviar comandos
     def criar_socket_escuta(self):
         """Cria um socket para escutar conexões de outros peers."""
         self.socket_listen = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket_listen.bind((self.ip, self.porta))
-        self.socket_listen.listen(5)  # Permite até 5 conexões na fila
-        #print(f"Socket de escuta criado em {self.ip}:{self.porta}")
+        self.socket_listen.listen(5) # número escolhido arbitrariamente
         
 
     def criar_socket_envio(self, peer_destino):
@@ -76,6 +75,7 @@ class Peer:
             print(f"Erro ao conectar com {peer_destino}: {e}")
             return None
         
+    # Inicia a thread para escutar os comandos sem interromper as ações do peer
     def escutar(self):
         threading.Thread(target=self.receive.escutar, daemon=True).start()
 
@@ -84,7 +84,8 @@ class Peer:
             self.socket_listen.close()
         if hasattr(self, "socket_send") and self.socket_send:
             self.socket_send.close()
-        
+    
+    # Comandos GET e de atualização para alguns atributos do peer
     def attClock(self):
         self.clock += 1
         
@@ -100,6 +101,7 @@ class Peer:
     def getIpPorta(self):
         return f"{self.getIP()}:{self.getPorta()}"
 
+    # métodos que encapsulam chamadas de métodos de lógica dos comandos
     def listarPeers(self):
         self.send.listarPeers()
 
@@ -111,6 +113,9 @@ class Peer:
         
     def handlePeersList(self, connecSocket):
         self.receive.handlePeersList(connecSocket)
+    
+    def sair(self):
+        self.send.sair()
         
     def listarArqLoc(self):
         arquivos = os.listdir(self.peerdir)
@@ -121,6 +126,5 @@ class Peer:
         for arquivo in arquivos_formatados:
             print(arquivo)
 
-    def sair(self):
-        self.send.sair()
+
     

@@ -9,26 +9,22 @@ class HandlerReceive:
         self.peer = peer
 
     def escutar(self):
-        # Usa o socket de escuta criado na classe Peer
-        self.peer.socket_listen.listen(4)  # Inicia a escuta para até 4 conexões simultâneas
+        self.peer.socket_listen.listen(5) 
         print("Escutando por conexões...")
 
         while True:
-            # Aceita conexões de clientes
-            conn, addr = self.peer.socket_listen.accept()  # Espera uma nova conexão
-            #print(f"Conexão recebida de {addr}")
-            # Cria uma nova thread para tratar a requisição
+            conn, addr = self.peer.socket_listen.accept() 
+            # Usamos threads para tratar cada requisição
             threading.Thread(target=self.tratarReq, args=(conn, addr), daemon=True).start()
 
     def tratarReq(self, conn, addr):
-        # Identifica o código da mensagem
         data = conn.recv(1024)
 
         try:
             data_str = data.decode('utf-8')  # Decodifica os dados para string
             origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
 
-            # Executa diferentes lógicas dependendo do TIPO
+            # Identifica o comando recebido
             if tipo == "HELLO":
                 self.handleHello(origem, clock)
             elif tipo == "GET_PEERS":
