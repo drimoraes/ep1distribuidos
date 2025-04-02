@@ -48,8 +48,12 @@ class Message:
             
     @staticmethod
     def mensagemPeerList(remetente, destinatario, clock, conn):
-        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST" para {destinatario} {remetente.tam_lista() - 1} {remetente.lista_peersStatus(destinatario)}')
-        mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {remetente.tam_lista()} {remetente.lista_peersStatus(destinatario)}"
+        if (remetente.buscar_peerIP(destinatario)):
+            tam_lista = remetente.tam_lista() - 1
+        else:
+            tam_lista = remetente.tam_lista()
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST {tam_lista} {remetente.lista_peersStatus(destinatario)}" para {destinatario}')
+        mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {tam_lista} {remetente.lista_peersStatus(destinatario)}"
     
         try:
             conn.sendall(mensagem.encode()) 

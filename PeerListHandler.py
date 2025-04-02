@@ -33,12 +33,12 @@ class PeerListHandler:
             self.peerslist[novo_status].append(peer) 
             print(f"Atualizando peer {peer} status {novo_status}")
         else:
-            print(f"Erro: O peer {peer} não está na lista {status_antigo}, não pode ser movido.")
+            print(f"O peer {peer} já está {novo_status}")
 
     # Adiciona um novo peer na lista com status desejado.
     def adicionar_peer(self, peer, status):
         if peer in self.peerslist["ONLINE"] or peer in self.peerslist["OFFLINE"]:
-            print(f"Erro: O peer {peer} já existe na lista.")
+            print(f"O peer {peer} já existe na lista.")
             return
         self.peerslist[status].append(peer) 
         print(f"Adicionando novo peer {peer} status {status}")

@@ -61,8 +61,11 @@ class HandlerReceive:
     def handleGetPeers(self, conn, origem, clock, tipo):
         print(f"Mensagem recebida: {origem} {clock} {tipo}")
         self.peer.attClock()
-        print(f"Atualizando relógio para {self.peer.getClock()}")
-        self.peer.atualizar_status_peer(origem, "ONLINE")
+        if (self.peer.buscar_peerIP(origem)):
+            print(f"Atualizando relógio para {self.peer.getClock()}")
+            self.peer.atualizar_status_peer(origem, "ONLINE")
+        else:
+            self.peer.adicionar_novo_peer(origem, "ONLINE")
         Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
         print(">")
         
@@ -78,7 +81,6 @@ class HandlerReceive:
         else:
             self.peer.adicionar_novo_peer(origem, "ONLINE")
         for peer in range(1, (int(argumentos[0]) + 1)):
-            print('entrei no loop')
             ip, porta, status,num = argumentos[peer].split(':')
             peerAdd = ip + ':' + porta
             self.peer.adicionar_novo_peer(peerAdd, status) 
