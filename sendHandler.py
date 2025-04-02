@@ -53,8 +53,8 @@ class HandlerSend:
         print('Saindo...')
         self.peer.attClock()
         clock = self.peer.getClock()
-        print (f"=> Atualizando relógio para {clock}")
         for destinatario in self.peer.peerslist["ONLINE"]: 
+            print (f"=> Atualizando relógio para {clock}")
             Message.mensagemBye(self.peer, destinatario, clock)
         print("Finalizando execução...")
         self.peer.mataSockets()

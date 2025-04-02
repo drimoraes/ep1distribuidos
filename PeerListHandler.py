@@ -40,11 +40,10 @@ class PeerListHandler:
         if peer in self.peerslist["ONLINE"] or peer in self.peerslist["OFFLINE"]:
             print(f"Erro: O peer {peer} já existe na lista.")
             return
-
         self.peerslist[status].append(peer) 
         print(f"Adicionando novo peer {peer} status {status}")
 
-    # Busca um peer específico e retorna o IP e a porta separados
+    
     def busca_peerIP(self, dest):
         for status in ["ONLINE", "OFFLINE"]:
             if dest in self.peerslist[status]:   
