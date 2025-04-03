@@ -2,10 +2,13 @@ import threading
 import re 
 import sys
 from message import Message
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from peer import Peer
 
 class HandlerReceive:
-    def __init__(self, peer):
+    def __init__(self, peer: "Peer"):
         self.peer = peer
 
     def escutar(self):
