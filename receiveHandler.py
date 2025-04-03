@@ -5,7 +5,7 @@ from message import Message
 
 
 class HandlerReceive:
-    def __init__(self, peer: "Peer"):
+    def __init__(self, peer):
         self.peer = peer
 
     def escutar(self):
@@ -42,11 +42,8 @@ class HandlerReceive:
     def handleHello(self, origem, clock):
         print(f"Mensagem recebida: {origem} {clock} HELLO")
         self.peer.attClock()
-        if (self.peer.buscar_peerIP(origem)):
-            print(f"Atualizando relógio para {self.peer.getClock()}")
-            self.peer.atualizar_status_peer(origem, "ONLINE")
-        else:
-            self.peer.adicionar_novo_peer(origem, "ONLINE")
+        print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
         print(">")
     
     def handleBye(self, origem, clock):
@@ -61,11 +58,8 @@ class HandlerReceive:
     def handleGetPeers(self, conn, origem, clock, tipo):
         print(f"Mensagem recebida: {origem} {clock} {tipo}")
         self.peer.attClock()
-        if (self.peer.buscar_peerIP(origem)):
-            print(f"Atualizando relógio para {self.peer.getClock()}")
-            self.peer.atualizar_status_peer(origem, "ONLINE")
-        else:
-            self.peer.adicionar_novo_peer(origem, "ONLINE")
+        print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
         Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
         print(">")
         
@@ -75,14 +69,11 @@ class HandlerReceive:
         arg_formatados = ' '.join(argumentos)
         print(f"Resposta recebida: {origem} {clock} {tipo} {arg_formatados}")
         self.peer.attClock()
-        if (self.peer.buscar_peerIP(origem)):
-            print(f"Atualizando relógio para {self.peer.getClock()}")
-            self.peer.atualizar_status_peer(origem, "ONLINE")
-        else:
-            self.peer.adicionar_novo_peer(origem, "ONLINE")
+        print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
         for peer in range(1, (int(argumentos[0]) + 1)):
             ip, porta, status,num = argumentos[peer].split(':')
             peerAdd = ip + ':' + porta
-            self.peer.adicionar_novo_peer(peerAdd, status) 
+            self.peer.adicionar_novo_peer(peerAdd, status)
             
 
