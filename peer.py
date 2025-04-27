@@ -16,7 +16,7 @@ class Peer:
         self.peerdir = diretorio
         self.receive = HandlerReceive(self)  
         self.send = HandlerSend(self)  
-        self.peerslist = {"ONLINE": [], "OFFLINE": []}   
+        self.peerslist = {"ONLINE": {}, "OFFLINE": {}}  
         self.peerslist_handler = PeerListHandler(self.peerslist) 
         self.verificaDir(self.peerdir)
         self.criar_socket_escuta()
@@ -51,6 +51,13 @@ class Peer:
     
     def lista_peersStatus(self, peerExcluido):
         return self.peerslist_handler.lista_peersStatus(peerExcluido)
+    
+    def returnClock(self, peer):
+        return self.peerslist_handler.returnClock(peer)
+    
+    def atualizaClock(self, peer, clock):
+        return self.peerslist_handler.atualizarClock(peer, clock)
+        
              
     # Cria sockets para escutar comandos e enviar comandos
     def criar_socket_escuta(self):
@@ -88,6 +95,9 @@ class Peer:
     # Comandos GET e de atualização para alguns atributos do peer
     def attClock(self):
         self.clock += 1
+    
+    def attClock2(self, newClock):
+        self.clock = int(newClock + 1)
         
     def getClock(self):
         return self.clock

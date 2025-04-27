@@ -43,24 +43,45 @@ class HandlerReceive:
             print(f"Erro ao processar mensagem: {e}")
 
     def handleHello(self, origem, clock):
-        print(f"Mensagem recebida: {origem} {clock} HELLO")
-        self.peer.attClock()
-        print(f"Atualizando relógio para {self.peer.getClock()}")
-        self.peer.atualizar_status_peer(origem, "ONLINE")
-        print(">")
+            print(f"Mensagem recebida: {origem} {clock} HELLO")
+            #atualiza o clock
+            localClock = self.peer.getClock()
+            newclock = max(localClock, int(clock))
+            self.peer.attClock2(newclock)
+            
+
+            #atualiza o clock da origem na lista
+            clocklista = self.peer.returnClock(origem)
+            newClockLista = max(int(clocklista), int(clock))
+            self.peer.atualizaClock(origem, newClockLista)
+
+            print(f"Atualizando relógio para {self.peer.getClock()}")
+            self.peer.atualizar_status_peer(origem, "ONLINE")
+            print(">")
+
     
     def handleBye(self, origem, clock):
         print(f"Mensagem recebida: {origem} {clock} BYE")
-        self.peer.attClock()
-        clock = self.peer.getClock()
-        print (f"=> Atualizando relógio para: {clock}")
+        localClock = self.peer.getClock()
+        newclock = max(localClock, int(clock))
+        self.peer.attClock2(newclock)
+        print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "OFFLINE")
         print(">")
         
  
     def handleGetPeers(self, conn, origem, clock, tipo):
         print(f"Mensagem recebida: {origem} {clock} {tipo}")
-        self.peer.attClock()
+        #att clock
+        localClock = self.peer.getClock()
+        newclock = max(localClock, int(clock))
+        self.peer.attClock2(newclock)
+
+        #atualiza o clock da origem na lista
+        clocklista = self.peer.returnClock(origem)
+        newClockLista = max(int(clocklista), int(clock))
+        self.peer.atualizaClock(origem, newClockLista)
+
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
         Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
@@ -71,7 +92,9 @@ class HandlerReceive:
         origem, clock, tipo, argumentos = Message.processarMensagem(data)
         arg_formatados = ' '.join(argumentos)
         print(f"Resposta recebida: {origem} {clock} {tipo} {arg_formatados}")
-        self.peer.attClock()
+        localClock = self.peer.getClock()
+        newclock = max(localClock, int(clock))
+        self.peer.attClock2(newclock)
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
         for peer in range(1, (int(argumentos[0]) + 1)):

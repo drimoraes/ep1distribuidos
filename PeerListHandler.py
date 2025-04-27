@@ -11,7 +11,7 @@ class PeerListHandler:
                 for linha in file:
                     endereco = linha.strip()
                     if endereco:
-                        self.peerslist["OFFLINE"].append(endereco)
+                        self.peerslist["OFFLINE"][endereco] = 0  # Agora adiciona com clock 0
                         print(f"Adicionando novo peer {endereco} status OFFLINE")
 
         except FileNotFoundError:
@@ -22,28 +22,26 @@ class PeerListHandler:
         if novo_status not in ["ONLINE", "OFFLINE"]:
             print("Erro: Status inválido. Use 'ONLINE' ou 'OFFLINE'.")
             return
-        
+
         if novo_status == "OFFLINE":
             status_antigo = "ONLINE"
         else:
             status_antigo = "OFFLINE"
 
         if peer in self.peerslist[status_antigo]: 
-            self.peerslist[status_antigo].remove(peer)
-            self.peerslist[novo_status].append(peer) 
+            clock = self.peerslist[status_antigo].pop(peer)  # Pega o clock e remove do antigo
+            self.peerslist[novo_status][peer] = clock        # Adiciona no novo status com mesmo clock
             print(f"Atualizando peer {peer} status {novo_status}")
         else:
             print(f"O peer {peer} já está {novo_status}")
 
-    # Adiciona um novo peer na lista com status desejado.
-    def adicionar_peer(self, peer, status):
+    def adicionar_peer(self, peer, status, clock=0):
         if peer in self.peerslist["ONLINE"] or peer in self.peerslist["OFFLINE"]:
             print(f"O peer {peer} já existe na lista.")
             return
-        self.peerslist[status].append(peer) 
+        self.peerslist[status][peer] = clock  # Adiciona com clock inicial
         print(f"Adicionando novo peer {peer} status {status}")
 
-    
     def busca_peerIP(self, dest):
         for status in ["ONLINE", "OFFLINE"]:
             if dest in self.peerslist[status]:   
@@ -53,21 +51,32 @@ class PeerListHandler:
     def listar_peers(self):
         index = 1 
         for status in ["OFFLINE", "ONLINE"]:  
-            for peer in self.peerslist[status]:  
-                print(f"[{index}] {peer} {status}")  
+            for peer, clock in self.peerslist[status].items():  
+                print(f"[{index}] {peer} {status} Clock:{clock}")  
                 index += 1 
 
-    # Retorna lista de peers no formato exigido por PEER LIST
     def lista_peersStatus(self, excluir_peer):
         peers_formatados = []
-
         for status in ["OFFLINE", "ONLINE"]:
-            for peer in self.peerslist[status]:
-                if peer != excluir_peer:  # Exclui o peer que enviou a mensagem GET PEERS
-                    peers_formatados.append(f"{peer}:{status}:0")
+            for peer, clock in self.peerslist[status].items():
+                if peer != excluir_peer:  
+                    peers_formatados.append(f"{peer}:{status}:{clock}")  # Inclui clock certo
         return " ".join(peers_formatados)
     
-    # Retorna o número total de peers (ONLINE + OFFLINE).
     def tamanho_lista(self):
         return len(self.peerslist["ONLINE"]) + len(self.peerslist["OFFLINE"])
-                
+    
+    def returnClock(self, peer_ip_porta):
+        for status in ["ONLINE", "OFFLINE"]:
+            if peer_ip_porta in self.peerslist[status]:
+                return self.peerslist[status][peer_ip_porta]
+        print(f"Peer {peer_ip_porta} não encontrado.")
+        return None
+    
+    def atualizarClock(self, peer_ip_porta, novo_clock):
+        for status in ["ONLINE", "OFFLINE"]:
+            if peer_ip_porta in self.peerslist[status]:
+                self.peerslist[status][peer_ip_porta] = novo_clock
+                print(f"Clock do peer {peer_ip_porta} atualizado para {novo_clock} na lista de Peers")
+                return
+        print(f"Peer {peer_ip_porta} não encontrado.")

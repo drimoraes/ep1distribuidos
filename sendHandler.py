@@ -19,7 +19,7 @@ class HandlerSend:
             try:
                 escolha = int(escolha) - 1 
 
-                lista_peers = list(self.peer.peerslist["OFFLINE"] + self.peer.peerslist["ONLINE"] )
+                lista_peers = list(self.peer.peerslist["OFFLINE"].keys()) + list(self.peer.peerslist["ONLINE"].keys())
 
                 if 0 <= escolha < len(lista_peers):
                     destinatario = lista_peers[escolha]  
