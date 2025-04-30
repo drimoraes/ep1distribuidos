@@ -7,7 +7,7 @@ class Message:
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} HELLO" para {destinatario}')
         socket_envio = remetente.criar_socket_envio(destinatario) 
         if socket_envio:
-            mensagem = f"{remetente.getIpPorta()} {clock} HELLO"
+            mensagem = f"{remetente.getIpPorta()} {clock} HELLO\n"
             try:
                 socket_envio.send(mensagem.encode()) 
                 
@@ -23,7 +23,7 @@ class Message:
     def mensagemBye(remetente, destinatario, clock):
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} BYE" para {destinatario}')
         socket_envio = remetente.criar_socket_envio(destinatario)
-        mensagem = f"{remetente.getIpPorta()} {clock} BYE"
+        mensagem = f"{remetente.getIpPorta()} {clock} BYE\n"
         try:
             socket_envio.send(mensagem.encode())
         except Exception as e:
@@ -35,7 +35,7 @@ class Message:
     def mensagemGetPeers(remetente, destinatario, clock):
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} GET_PEERS" para {destinatario}')
         socket_envio = remetente.criar_socket_envio(destinatario) 
-        mensagem = f"{remetente.getIpPorta()} {clock} GET_PEERS"
+        mensagem = f"{remetente.getIpPorta()} {clock} GET_PEERS\n"
         try:
             socket_envio.send(mensagem.encode())
             return socket_envio
@@ -52,7 +52,7 @@ class Message:
         else:
             tam_lista = remetente.tam_lista()
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST {tam_lista} {remetente.lista_peersStatus(destinatario)}" para {destinatario}')
-        mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {tam_lista} {remetente.lista_peersStatus(destinatario)}"
+        mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {tam_lista} {remetente.lista_peersStatus(destinatario)}\n"
     
         try:
             conn.sendall(mensagem.encode()) 
@@ -66,7 +66,7 @@ class Message:
     def mensagemBuscaArq(remetente, destinatario, clock):
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} LS" para {destinatario}')
         socket_envio = remetente.criar_socket_envio(destinatario) 
-        mensagem = f"{remetente.getIpPorta()} {clock} LS"
+        mensagem = f"{remetente.getIpPorta()} {clock} LS\n"
         try:
             socket_envio.send(mensagem.encode())
             return socket_envio
@@ -82,7 +82,7 @@ class Message:
         #arquivos = remetente.listaArqTam()
 
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} LS_LIST {tam_lista} {remetente.listaArqTam()}" para {destinatario}')
-        mensagem = f"{remetente.getIpPorta()} {clock} LS_LIST {tam_lista} {remetente.listaArqTam()}"
+        mensagem = f"{remetente.getIpPorta()} {clock} LS_LIST {tam_lista} {remetente.listaArqTam()}\n"
     
         try:
             conn.sendall(mensagem.encode()) 

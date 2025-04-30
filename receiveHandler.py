@@ -91,6 +91,7 @@ class HandlerReceive:
         self.peer.atualizar_status_peer(origem, "ONLINE")
         Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)
         print(">")
+        
 
     def handlePeersList(self, conn):
         data_str = self.recv_completo(conn)

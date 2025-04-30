@@ -14,7 +14,7 @@ class Peer:
         self.clock = 0
         self.arquivo = arquivotxt
         self.peerdir = diretorio
-        self.arqEncontrados = {}
+        self.arqEncontrados = []
         self.receive = HandlerReceive(self)  
         self.send = HandlerSend(self)  
         self.peerslist = {"ONLINE": {}, "OFFLINE": {}}  
@@ -158,7 +158,7 @@ class Peer:
         for arquivo in arquivos:
             caminho = os.path.join(self.peerdir, arquivo)
             tamanho = os.path.getsize(caminho)
-            arquivos_formatados.append(f"{arquivo},{tamanho}")
+            arquivos_formatados.append(f"{arquivo}:{tamanho}")
 
         return " ".join(arquivos_formatados)
     
