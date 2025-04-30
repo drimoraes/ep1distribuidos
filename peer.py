@@ -14,6 +14,7 @@ class Peer:
         self.clock = 0
         self.arquivo = arquivotxt
         self.peerdir = diretorio
+        self.arqEncontrados = {}
         self.receive = HandlerReceive(self)  
         self.send = HandlerSend(self)  
         self.peerslist = {"ONLINE": {}, "OFFLINE": {}}  
@@ -121,8 +122,17 @@ class Peer:
     def sair(self):
         self.send.sair()
         
+    def buscarArq(self):
+        self.send.buscarArq()
+        
     def handlePeersList(self, connecSocket):
         self.receive.handlePeersList(connecSocket)
+        
+    def handleLSList(self, connecSocket):
+        self.receive.handleLSList(connecSocket)
+    
+    def exibeArquivosEncontrados(self):
+        self.send.exibeArquivosEncontrados()
     
     def sair(self):
         self.send.sair()
@@ -133,8 +143,38 @@ class Peer:
         for arquivo in arquivos:
             arquivos_formatados.append(os.path.basename(arquivo))
 
+
         for arquivo in arquivos_formatados:
             print(arquivo)
+            
+    def qtdArqLoc(self):
+        arquivos = os.listdir(self.peerdir)
+        return len(arquivos)
+    
+    def listaArqTam(self):
+        arquivos = os.listdir(self.peerdir)
+        arquivos_formatados = []
+
+        for arquivo in arquivos:
+            caminho = os.path.join(self.peerdir, arquivo)
+            tamanho = os.path.getsize(caminho)
+            arquivos_formatados.append(f"{arquivo},{tamanho}")
+
+        return " ".join(arquivos_formatados)
+    
+    def adicionar_novo_arq_encontrado(self, nome, tam, peer):
+        for arq in self.arqEncontrados:
+            if arq["nome"] == nome and arq["tamanho"] == tam and arq["peer"] == peer:
+                return
+        
+        self.arqEncontrados.append({
+        "nome": nome,
+        "tamanho": tam,
+        "peer": peer
+    })
+        
+        #for arquivoTam in arquivos_formatados:
+        #    print(arquivoTam)
 
 
     

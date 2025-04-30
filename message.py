@@ -45,7 +45,6 @@ class Message:
             remetente.atualizar_status_peer(destinatario, "OFFLINE")
             
 
-            
     @staticmethod
     def mensagemPeerList(remetente, destinatario, clock, conn):
         if (remetente.buscar_peerIP(destinatario)):
@@ -54,6 +53,36 @@ class Message:
             tam_lista = remetente.tam_lista()
         print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} PEER_LIST {tam_lista} {remetente.lista_peersStatus(destinatario)}" para {destinatario}')
         mensagem = f"{remetente.getIpPorta()} {clock} PEER_LIST {tam_lista} {remetente.lista_peersStatus(destinatario)}"
+    
+        try:
+            conn.sendall(mensagem.encode()) 
+        except Exception as e:
+            print(f"Erro ao enviar mensagem para {destinatario}: {e}")
+
+        finally:
+            conn.close() 
+            
+    @staticmethod
+    def mensagemBuscaArq(remetente, destinatario, clock):
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} LS" para {destinatario}')
+        socket_envio = remetente.criar_socket_envio(destinatario) 
+        mensagem = f"{remetente.getIpPorta()} {clock} LS"
+        try:
+            socket_envio.send(mensagem.encode())
+            return socket_envio
+        
+        except Exception as e:
+            print(f"Erro ao enviar mensagem para {destinatario}: {e}")
+            remetente.atualizar_status_peer(destinatario, "OFFLINE")
+            
+    @staticmethod
+    def mensagemLSList(remetente, destinatario, clock, conn):
+        
+        tam_lista = remetente.qtdArqLoc()
+        #arquivos = remetente.listaArqTam()
+
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} LS_LIST {tam_lista} {remetente.listaArqTam()}" para {destinatario}')
+        mensagem = f"{remetente.getIpPorta()} {clock} LS_LIST {tam_lista} {remetente.listaArqTam()}"
     
         try:
             conn.sendall(mensagem.encode()) 
@@ -78,3 +107,21 @@ class Message:
         else:
             print("Erro: formato de mensagem inválido.")
             return None, None, None, None
+        
+    @staticmethod
+    def mensagemDL(remetente, destinatario, clock):
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} HELLO" para {destinatario}')
+        socket_envio = remetente.criar_socket_envio(destinatario) 
+        if socket_envio:
+            mensagem = f"{remetente.getIpPorta()} {clock} HELLO"
+            try:
+                socket_envio.send(mensagem.encode()) 
+                
+                remetente.atualizar_status_peer(destinatario, "ONLINE")
+
+            except Exception as e:
+                print(f"Erro ao enviar mensagem para {destinatario}: {e}")
+            finally:
+                socket_envio.close() 
+        else:
+            remetente.atualizar_status_peer(destinatario, "OFFLINE")
