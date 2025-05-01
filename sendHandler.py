@@ -80,32 +80,33 @@ class HandlerSend:
     def exibeArquivosEncontrados(self):
 
         print("Arquivos encontrados na rede:")
-        print(f"{'':<5}{'Nome':<20} | {'Tamanho':<8} | {'Peer'}")
-        print(f"[ 0] {'<Cancelar>':<20} | {'':<8} | {'':<15}")
+        print(f"{'':<5}{'Nome':<20} | {'Tamanho':<10} | {'Peer'}")
+        print(f"[ 0] {'<Cancelar>':<20} | {'':<10} | {'':<15}")
 
         for i, arq in enumerate(self.peer.arqEncontrados):
             nome = arq['nome']
             tamanho = arq['tamanho']
             peer = arq['peer']
-            print(f"[ {i + 1}] {nome:<20} | {tamanho:<8} | {peer}") 
+            print(f"[ {i + 1}] {nome:<20} | {tamanho:<10} | {peer}") 
 
-            escolha = input("> ")
-            if escolha == "0":
-                print("Voltando para o menu...")
-            else:
-                try:
-                    escolha = int(escolha) - 1 
-
-                    if 0 <= escolha < len(self.peer.arqEncontrados):
-                        destinatario = self.peer.arqEncontrados[escolha]['peer']  
-                        self.peer.attClock()
-                        clock = self.peer.getClock()
-                        print (f"Atualizando relógio para {clock}")
-                        Message.mensagemDL(self.peer, destinatario, clock)
-                    else:
-                        print("Opção inválida!")
-                except ValueError:
-                    print("Opção inválida! Por favor, escolha um número.")
+        escolha = input("> ")
+        if escolha == "0":
+            print("Voltando para o menu...")
+        else:
+            try:
+                escolha = int(escolha) - 1 
+                if 0 <= escolha < len(self.peer.arqEncontrados):
+                    destinatario = self.peer.arqEncontrados[escolha]['peer']  
+                    self.peer.attClock()
+                    clock = self.peer.getClock()
+                    print (f"Atualizando relógio para {clock}")
+                    connection_socket = Message.mensagemDL(self.peer, destinatario, clock, self.peer.arqEncontrados[escolha]['nome'])
+                    if connection_socket: 
+                        self.peer.handleFILE(connection_socket)
+                else:
+                    print("Opção inválida!")
+            except ValueError:
+                print("Opção inválida! Por favor, escolha um número.")
 
 
 

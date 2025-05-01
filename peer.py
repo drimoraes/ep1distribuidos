@@ -5,6 +5,7 @@ import os
 from receiveHandler import HandlerReceive
 from sendHandler import HandlerSend
 from PeerListHandler import PeerListHandler
+import base64
 
 
 class Peer: 
@@ -127,7 +128,10 @@ class Peer:
         
     def handlePeersList(self, connecSocket):
         self.receive.handlePeersList(connecSocket)
-        
+
+    def handleFILE(self, connecSocket):
+        self.receive.handleFILE(connecSocket)
+
     def handleLSList(self, connecSocket):
         self.receive.handleLSList(connecSocket)
     
@@ -162,6 +166,34 @@ class Peer:
 
         return " ".join(arquivos_formatados)
     
+    def conteudoArq(self, arquivo):
+        pathEarquivo = os.path.join(self.peerdir, arquivo)
+
+        with open(pathEarquivo, 'rb') as f:
+            conteudo = f.read()
+            conteudo_base64 = base64.b64encode(conteudo).decode('utf-8')
+        return conteudo_base64
+    
+    def baixarArq(self, arquivo, conteudo):
+        pathEarquivo = os.path.join(self.peerdir, arquivo)
+
+        try:
+            
+            with open(pathEarquivo, 'wb') as f:
+                f.write(base64.b64decode(conteudo))
+
+            print(f'Arquivo salvo com sucesso em: {pathEarquivo}')
+
+        except (base64.binascii.Error, ValueError) as erro_base64:
+            print(f'Erro ao decodificar base64: {erro_base64}')
+
+        except OSError as erro_arquivo:
+            print(f'Erro ao salvar o arquivo: {erro_arquivo}')
+
+        except Exception as e:
+            print(f'Ocorreu um erro inesperado: {e}')
+
+
     def adicionar_novo_arq_encontrado(self, nome, tam, peer):
         for arq in self.arqEncontrados:
             if arq["nome"] == nome and arq["tamanho"] == tam and arq["peer"] == peer:

@@ -91,8 +91,35 @@ class Message:
 
         finally:
             conn.close() 
+    
+    @staticmethod
+    def mensagemDL(remetente, destinatario, clock, nomeArq):
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} DL {nomeArq} 0 0" para {destinatario}')
+        socket_envio = remetente.criar_socket_envio(destinatario) 
+        mensagem = f"{remetente.getIpPorta()} {clock} GET_PEERS\n"
+        try:
+            socket_envio.send(mensagem.encode())
+            return socket_envio
+        
+        except Exception as e:
+            print(f"Erro ao enviar mensagem para {destinatario}: {e}")
+            remetente.atualizar_status_peer(destinatario, "OFFLINE")
 
-    # trata as mensagens separando e retornando os componentes dela
+    @staticmethod
+    def mensagemFILE(remetente, destinatario, clock, conn, nomeArq):
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} FILE {nomeArq} 0 0" para {destinatario}')
+        conteudo = remetente.conteudoArq(nomeArq)
+        mensagem = f"{remetente.getIpPorta()} {clock} FILE {nomeArq} 0 0 {conteudo}"
+        try:
+            conn.sendall(mensagem.encode()) 
+        except Exception as e:
+            print(f"Erro ao enviar mensagem para {destinatario}: {e}")
+
+        finally:
+            conn.close() 
+
+
+        # trata as mensagens separando e retornando os componentes dela
     @staticmethod        
     def processarMensagem(data_str):
         match = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s*(.*)", data_str)
@@ -107,21 +134,3 @@ class Message:
         else:
             print("Erro: formato de mensagem inválido.")
             return None, None, None, None
-        
-    @staticmethod
-    def mensagemDL(remetente, destinatario, clock):
-        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} HELLO" para {destinatario}')
-        socket_envio = remetente.criar_socket_envio(destinatario) 
-        if socket_envio:
-            mensagem = f"{remetente.getIpPorta()} {clock} HELLO"
-            try:
-                socket_envio.send(mensagem.encode()) 
-                
-                remetente.atualizar_status_peer(destinatario, "ONLINE")
-
-            except Exception as e:
-                print(f"Erro ao enviar mensagem para {destinatario}: {e}")
-            finally:
-                socket_envio.close() 
-        else:
-            remetente.atualizar_status_peer(destinatario, "OFFLINE")

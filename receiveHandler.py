@@ -48,6 +48,8 @@ class HandlerReceive:
                 self.handleLS(conn, origem, clock, tipo)
             elif tipo == "LS_LIST":
                 self.handleLSList(conn, origem, clock, tipo)
+            elif tipo == "DL":
+                self.handleDL(conn, origem, clock, tipo, argumentos)
             else:
                 print(f"Tipo {tipo} desconhecido.")
 
@@ -129,7 +131,7 @@ class HandlerReceive:
         data_str = self.recv_completo(conn)
         origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
         arg_formatados = ' '.join(argumentos)
-        print(f"Resposta recebida: {origem} {clock} {tipo} {arg_formatados}")
+        print(f'Resposta recebida: "{origem} {clock} {tipo} {arg_formatados}"')
         
         localClock = self.peer.getClock()
         newclock = max(localClock, int(clock))
@@ -142,3 +144,37 @@ class HandlerReceive:
             self.peer.adicionar_novo_arq_encontrado(nome, tam, origem)
         
         self.peer.exibeArquivosEncontrados()
+
+
+    def handleDL(self, conn, origem, clock, tipo, args):
+        arg_formatados = ' '.join(args)
+        print(f"Mensagem recebida: {origem} {clock} {tipo} {arg_formatados}")
+        localClock = self.peer.getClock()
+        newclock = max(localClock, int(clock))
+        self.peer.attClock2(newclock)
+
+        clocklista = self.peer.returnClock(origem)
+        newClockLista = max(int(clocklista), int(clock))
+        self.peer.atualizaClock(origem, newClockLista)
+
+        print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
+
+        nomearq = arg_formatados[0]
+        Message.mensagemFILE(self.peer, origem, self.peer.getClock(), conn, nomearq)
+        print(">")
+
+
+    def handleFILE(self, conn):
+        data_str = self.recv_completo(conn)
+        origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
+        arg_formatados = ' '.join(argumentos)
+        print(f"Resposta recebida: {origem} {clock} {tipo} {arg_formatados}")
+        
+        localClock = self.peer.getClock()
+        newclock = max(localClock, int(clock))
+        self.peer.attClock2(newclock)
+        print(f"Atualizando relógio para {self.peer.getClock()}")
+        self.peer.atualizar_status_peer(origem, "ONLINE")
+
+        self.peer.baixarArq(arg_formatados[0], arg_formatados[3])
