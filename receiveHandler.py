@@ -106,11 +106,16 @@ class HandlerReceive:
         self.peer.attClock2(newclock)
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
+
+        clocklista = self.peer.returnClock(origem)
+        newClockLista = max(int(clocklista), int(clock))
+        self.peer.atualizaClock(origem, newClockLista)
         
         for peer in range(1, (int(argumentos[0]) + 1)):
             ip, porta, status, num = argumentos[peer].split(':')
             peerAdd = ip + ':' + porta
-            self.peer.adicionar_novo_peer(peerAdd, status)
+            clockmsg = int(num)
+            self.peer.adicionar_novo_peer2(peerAdd, status, clockmsg)
             
     def handleLS(self, conn, origem, clock, tipo):
         print(f"Mensagem recebida: {origem} {clock} {tipo}")

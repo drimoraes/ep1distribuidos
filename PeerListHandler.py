@@ -42,6 +42,20 @@ class PeerListHandler:
         self.peerslist[status][peer] = clock  # Adiciona com clock inicial
         print(f"Adicionando novo peer {peer} status {status}")
 
+    def adicionar_peer2(self, peer, status, clock=0):
+        # Peer já está na lista? Então verifica em qual status
+        for s in ["ONLINE", "OFFLINE"]:
+            if peer in self.peerslist[s]:
+                clock_atual = self.peerslist[s][peer]
+                if clock > clock_atual:
+                    self.peerslist[s][peer] = clock
+                return
+
+        # Se não está em nenhuma lista, adiciona com clock (0 ou passado)
+        self.peerslist[status][peer] = clock
+        print(f"Adicionando novo peer {peer} : {status} : {clock}")
+
+
     def busca_peerIP(self, dest):
         for status in ["ONLINE", "OFFLINE"]:
             if dest in self.peerslist[status]:   
