@@ -94,9 +94,9 @@ class Message:
     
     @staticmethod
     def mensagemDL(remetente, destinatario, clock, nomeArq):
-        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} DL {nomeArq} 0 0" para {destinatario}')
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} DL {nomeArq} {0} {0}" para {destinatario}')
         socket_envio = remetente.criar_socket_envio(destinatario) 
-        mensagem = f"{remetente.getIpPorta()} {clock} GET_PEERS\n"
+        mensagem = f"{remetente.getIpPorta()} {clock} DL {nomeArq} {0} {0}\n"
         try:
             socket_envio.send(mensagem.encode())
             return socket_envio
@@ -107,9 +107,9 @@ class Message:
 
     @staticmethod
     def mensagemFILE(remetente, destinatario, clock, conn, nomeArq):
-        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} FILE {nomeArq} 0 0" para {destinatario}')
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} FILE {nomeArq} {0} {0}" para {destinatario}')
         conteudo = remetente.conteudoArq(nomeArq)
-        mensagem = f"{remetente.getIpPorta()} {clock} FILE {nomeArq} 0 0 {conteudo}"
+        mensagem = f"{remetente.getIpPorta()} {clock} FILE {nomeArq} {0} {0} {conteudo}"
         try:
             conn.sendall(mensagem.encode()) 
         except Exception as e:

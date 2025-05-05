@@ -185,7 +185,7 @@ class Peer:
             with open(pathEarquivo, 'wb') as f:
                 f.write(base64.b64decode(conteudo))
 
-            print(f'Arquivo salvo com sucesso em: {pathEarquivo}')
+            print(f'Download do {arquivo} finalizado.')
 
         except (base64.binascii.Error, ValueError) as erro_base64:
             print(f'Erro ao decodificar base64: {erro_base64}')

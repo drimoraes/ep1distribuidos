@@ -32,8 +32,8 @@ class PeerListHandler:
             clock = self.peerslist[status_antigo].pop(peer)  # Pega o clock e remove do antigo
             self.peerslist[novo_status][peer] = clock        # Adiciona no novo status com mesmo clock
             print(f"Atualizando peer {peer} status {novo_status}")
-        else:
-            print(f"O peer {peer} já está {novo_status}")
+        #else:
+           #print(f"O peer {peer} já está {novo_status}")
 
     def adicionar_peer(self, peer, status, clock=0):
         if peer in self.peerslist["ONLINE"] or peer in self.peerslist["OFFLINE"]:
@@ -91,6 +91,6 @@ class PeerListHandler:
         for status in ["ONLINE", "OFFLINE"]:
             if peer_ip_porta in self.peerslist[status]:
                 self.peerslist[status][peer_ip_porta] = novo_clock
-                print(f"Clock do peer {peer_ip_porta} atualizado para {novo_clock} na lista de Peers")
+                #print(f"Clock do peer {peer_ip_porta} atualizado para {novo_clock} na lista de Peers")
                 return
         print(f"Peer {peer_ip_porta} não encontrado.")

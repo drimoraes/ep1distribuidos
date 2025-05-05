@@ -165,7 +165,7 @@ class HandlerReceive:
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
 
-        nomearq = arg_formatados[0]
+        nomearq = args[0]
         Message.mensagemFILE(self.peer, origem, self.peer.getClock(), conn, nomearq)
         print(">")
 
@@ -182,4 +182,4 @@ class HandlerReceive:
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
 
-        self.peer.baixarArq(arg_formatados[0], arg_formatados[3])
+        self.peer.baixarArq(argumentos[0], argumentos[3])
