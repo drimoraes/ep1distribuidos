@@ -66,7 +66,7 @@ class PeerListHandler:
         index = 1 
         for status in ["OFFLINE", "ONLINE"]:  
             for peer, clock in self.peerslist[status].items():  
-                print(f"[{index}] {peer} {status} Clock:{clock}")  
+                print(f"[{index}] {peer} :{status} :{clock}")  
                 index += 1 
 
     def lista_peersStatus(self, excluir_peer):
@@ -91,6 +91,5 @@ class PeerListHandler:
         for status in ["ONLINE", "OFFLINE"]:
             if peer_ip_porta in self.peerslist[status]:
                 self.peerslist[status][peer_ip_porta] = novo_clock
-                #print(f"Clock do peer {peer_ip_porta} atualizado para {novo_clock} na lista de Peers")
                 return
         print(f"Peer {peer_ip_porta} não encontrado.")
