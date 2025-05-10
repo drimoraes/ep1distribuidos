@@ -148,7 +148,7 @@ class HandlerReceive:
             nome, tam = argumentos[arq].split(':')
             self.peer.adicionar_novo_arq_encontrado(nome, tam, origem)
         
-        self.peer.exibeArquivosEncontrados()
+
 
 
     def handleDL(self, conn, origem, clock, tipo, args):

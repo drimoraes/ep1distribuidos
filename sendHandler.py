@@ -65,6 +65,8 @@ class HandlerSend:
                     self.peer.handleLSList(connection_socket)
 
                 enviados.append(peerDest)
+                
+            self.peer.exibeArquivosEncontrados()
 
     def sair(self):
         print('Saindo...')
