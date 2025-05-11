@@ -61,13 +61,19 @@ class HandlerReceive:
         localClock = self.peer.getClock()
         newclock = max(localClock, int(clock))
         self.peer.attClock2(newclock)
-
-        clocklista = self.peer.returnClock(origem)
-        newClockLista = max(int(clocklista), int(clock))
-        self.peer.atualizaClock(origem, newClockLista)
-
         print(f"Atualizando relógio para {self.peer.getClock()}")
-        self.peer.atualizar_status_peer(origem, "ONLINE")
+
+        if self.peer.buscar_peerIP(origem):
+
+            self.peer.atualizar_status_peer(origem, "ONLINE")
+            clocklista = self.peer.returnClock(origem)
+            newClockLista = max(int(clocklista), int(clock))
+            self.peer.atualizaClock(origem, newClockLista)
+        
+        else:
+            self.peer.adicionar_novo_peer(origem, "OFFLINE")
+            self.peer.atualizar_status_peer(origem, "ONLINE")
+            
         print(">")
 
     def handleBye(self, origem, clock):
