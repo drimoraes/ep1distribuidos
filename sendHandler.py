@@ -66,7 +66,7 @@ class HandlerSend:
 
                 enviados.append(peerDest)
                 
-            self.peer.exibeArquivosEncontrados()
+            self.exibeArquivosEncontrados()
 
     def sair(self):
         print('Saindo...')
