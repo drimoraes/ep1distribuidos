@@ -71,8 +71,7 @@ class HandlerReceive:
             self.peer.atualizaClock(origem, newClockLista)
         
         else:
-            self.peer.adicionar_novo_peer(origem, "OFFLINE")
-            self.peer.atualizar_status_peer(origem, "ONLINE")
+            self.peer.adicionar_novo_peer(origem, "ONLINE")
             
         print(">")
 
