@@ -45,8 +45,8 @@ class Peer:
     def adicionar_novo_peer2(self, peer, status, clock):
         self.peerslist_handler.adicionar_peer2(peer, status,clock)
 
-    def buscar_peer(self, peer):
-        return self.peerslist_handler.busca_peer(peer)
+    #def buscar_peer(self, peer):
+    #    return self.peerslist_handler.busca_peer(peer)
     
     def buscar_peerIP(self, peer):
         return self.peerslist_handler.busca_peerIP(peer)

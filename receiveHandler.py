@@ -90,10 +90,11 @@ class HandlerReceive:
         newclock = max(localClock, int(clock))
         self.peer.attClock2(newclock)
 
+        if (not self.peer.buscar_peerIP(origem)): 
+            self.peer.adicionar_novo_peer2(origem, "ONLINE", clock)
         clocklista = self.peer.returnClock(origem)
         newClockLista = max(int(clocklista), int(clock))
         self.peer.atualizaClock(origem, newClockLista)
-
         print(f"Atualizando relógio para {self.peer.getClock()}")
         self.peer.atualizar_status_peer(origem, "ONLINE")
         Message.mensagemPeerList(self.peer, origem, self.peer.getClock(), conn)

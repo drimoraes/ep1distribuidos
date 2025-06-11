@@ -35,7 +35,7 @@ class HandlerSend:
     def obterPeers(self):
         enviados = []  # Foi necessário adicionar ess estrutura auxiliar para não enviar a mensagem repetidas vezes
         for status in ["OFFLINE", "ONLINE"]:
-            for peerDest in self.peer.peerslist[status]:
+            for peerDest in list(self.peer.peerslist[status]):
                 if peerDest in enviados:
                     continue
 
@@ -44,7 +44,7 @@ class HandlerSend:
                 print(f"Atualizando relógio para {clock}")
 
                 connection_socket = Message.mensagemGetPeers(self.peer, peerDest, clock)
-                if connection_socket: 
+                if connection_socket:  
                     self.peer.handlePeersList(connection_socket)
 
                 enviados.append(peerDest)
