@@ -31,6 +31,8 @@ while True:
         peer.listarArqLoc()
     if escolha == 4:
         peer.buscarArq()
+    if escolha == 6:
+        peer.alterarChunk()
     if escolha == 9:
         peer.sair()
 

@@ -15,7 +15,8 @@ class Peer:
         self.clock = 0
         self.arquivo = arquivotxt
         self.peerdir = diretorio
-        self.arqEncontrados = []
+        self.arqEncontrados = {}
+        self.chunk = 256
         self.receive = HandlerReceive(self)  
         self.send = HandlerSend(self)  
         self.peerslist = {"ONLINE": {}, "OFFLINE": {}}  
@@ -150,9 +151,16 @@ class Peer:
         for arquivo in arquivos:
             arquivos_formatados.append(os.path.basename(arquivo))
 
-
         for arquivo in arquivos_formatados:
             print(arquivo)
+
+    def alterarChunk(self):
+        print("Digite o novo tamanho de chunk: ")
+        valor = input("> ")
+        self.chunk = int(valor)
+
+    def getChunk(self):
+        return self.chunk
             
     def qtdArqLoc(self):
         arquivos = os.listdir(self.peerdir)
@@ -196,17 +204,14 @@ class Peer:
         except Exception as e:
             print(f'Ocorreu um erro inesperado: {e}')
 
-
     def adicionar_novo_arq_encontrado(self, nome, tam, peer):
-        for arq in self.arqEncontrados:
-            if arq["nome"] == nome and arq["tamanho"] == tam and arq["peer"] == peer:
-                return
-        
-        self.arqEncontrados.append({
-        "nome": nome,
-        "tamanho": tam,
-        "peer": peer
-    })
+        chave = (nome, tam)
+        if chave not in self.arqEncontrados:
+            self.arqEncontrados[chave] = []
+    
+        if peer not in self.arqEncontrados[chave]:
+            self.arqEncontrados[chave].append(peer)
+
         
         #for arquivoTam in arquivos_formatados:
         #    print(arquivoTam)

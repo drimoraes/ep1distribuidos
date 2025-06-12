@@ -82,14 +82,15 @@ class HandlerSend:
     def exibeArquivosEncontrados(self):
 
         print("Arquivos encontrados na rede:")
-        print(f"{'':<5}{'Nome':<20} | {'Tamanho':<10} | {'Peer'}")
-        print(f"[ 0] {'<Cancelar>':<20} | {'':<10} | {'':<15}")
+        print("Nome | Tamanho | Peers")
+        print("[ 0] <Cancelar> | |")
 
-        for i, arq in enumerate(self.peer.arqEncontrados):
-            nome = arq['nome']
-            tamanho = arq['tamanho']
-            peer = arq['peer']
-            print(f"[ {i + 1}] {nome:<20} | {tamanho:<10} | {peer}") 
+        index = 1
+        for (nome, tamanho), peers in self.peer.arqEncontrados.items():
+            peers_str = ', '.join(peers)
+            print(f"[ {index}] {nome} | {tamanho} | {peers_str}")
+            index += 1
+
 
         escolha = input("> ")
         if escolha == "0":
