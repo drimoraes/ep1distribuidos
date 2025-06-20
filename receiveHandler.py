@@ -172,7 +172,9 @@ class HandlerReceive:
         self.peer.atualizar_status_peer(origem, "ONLINE")
 
         nomearq = args[0]
-        Message.mensagemFILE(self.peer, origem, self.peer.getClock(), conn, nomearq)
+        chunk = int(args[1])
+        indexChunk = int(args[2])
+        Message.mensagemFILE(self.peer, origem, self.peer.getClock(), conn, nomearq, chunk, indexChunk)
         print(">")
 
 

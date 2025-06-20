@@ -177,12 +177,24 @@ class Peer:
 
         return " ".join(arquivos_formatados)
     
-    def conteudoArq(self, arquivo):
+    def conteudoArq(self, arquivo, inicio, fim):
         pathEarquivo = os.path.join(self.peerdir, arquivo)
 
+        if not os.path.isfile(pathEarquivo):
+            raise FileNotFoundError(f"Arquivo '{arquivo}' não encontrado no diretório {self.peerdir}.")
+
+        tamanho_arquivo = os.path.getsize(pathEarquivo)
+
+        if inicio < 0 or fim < 0 or inicio > fim:
+            raise ValueError("Parâmetros inválidos: 'inicio' e 'fim' devem ser positivos e 'inicio' <= 'fim'.")
+        
+        fim_ajustado = min(fim, tamanho_arquivo - 1)
+
         with open(pathEarquivo, 'rb') as f:
-            conteudo = f.read()
+            f.seek(inicio)
+            conteudo = f.read((fim_ajustado - inicio) + 1)  # fim incluso
             conteudo_base64 = base64.b64encode(conteudo).decode('utf-8')
+
         return conteudo_base64
     
     def baixarArq(self, arquivo, conteudo):

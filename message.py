@@ -93,10 +93,10 @@ class Message:
             conn.close() 
     
     @staticmethod
-    def mensagemDL(remetente, destinatario, clock, nomeArq):
-        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} DL {nomeArq} {0} {0}" para {destinatario}')
+    def mensagemDL(remetente, destinatario, clock, nomeArq, chunk, indexChunk):
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} DL {nomeArq} {chunk} {indexChunk}" para {destinatario}')
         socket_envio = remetente.criar_socket_envio(destinatario) 
-        mensagem = f"{remetente.getIpPorta()} {clock} DL {nomeArq} {0} {0}\n"
+        mensagem = f"{remetente.getIpPorta()} {clock} DL {nomeArq} {chunk} {indexChunk}\n"
         try:
             socket_envio.send(mensagem.encode())
             return socket_envio
@@ -106,10 +106,10 @@ class Message:
             remetente.atualizar_status_peer(destinatario, "OFFLINE")
 
     @staticmethod
-    def mensagemFILE(remetente, destinatario, clock, conn, nomeArq):
-        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} FILE {nomeArq} {0} {0}" para {destinatario}')
-        conteudo = remetente.conteudoArq(nomeArq)
-        mensagem = f"{remetente.getIpPorta()} {clock} FILE {nomeArq} {0} {0} {conteudo}"
+    def mensagemFILE(remetente, destinatario, clock, conn, nomeArq, chunk, indexChunk):
+        conteudo = remetente.conteudoArq(nomeArq, chunk * indexChunk, chunk * (indexChunk + 1))
+        print(f'Encaminhando mensagem "{remetente.getIpPorta()} {clock} FILE {nomeArq} {chunk} {indexChunk} {conteudo}" para {destinatario}')
+        mensagem = f"{remetente.getIpPorta()} {clock} FILE {nomeArq} {chunk} {indexChunk} {conteudo}"
         try:
             conn.sendall(mensagem.encode()) 
         except Exception as e:

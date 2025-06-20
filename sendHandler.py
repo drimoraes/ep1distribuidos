@@ -49,6 +49,27 @@ class HandlerSend:
 
                 enviados.append(peerDest)
                 
+    def enviaDL(self, index):
+        if not self.peer.arqEncontrados:
+            print("Nenhum arquivo encontrado. Por favor, busque arquivos primeiro.")
+            return
+
+        arquivos = list(self.peer.arqEncontrados.items())
+        nome, tamanho = arquivos[index][0]
+        peers = arquivos[index][1]
+        chunk = self.peer.chunk
+        indexChunk = 0
+        totalChunks = int(tamanho) // chunk + (1 if int(tamanho) % chunk > 0 else 0)
+        while indexChunk < totalChunks:
+            for peerDest in peers:
+                if indexChunk >= totalChunks:
+                    break
+                self.peer.attClock()
+                clock = self.peer.getClock()
+                print(f"Atualizando relógio para {clock}")
+                Message.mensagemDL(self.peer, peerDest, clock, nome, chunk, indexChunk)
+                indexChunk += 1
+                
     def buscarArq(self):
         enviados = [] 
         for status in ["ONLINE"]:
@@ -99,13 +120,7 @@ class HandlerSend:
             try:
                 escolha = int(escolha) - 1 
                 if 0 <= escolha < len(self.peer.arqEncontrados):
-                    destinatario = self.peer.arqEncontrados[escolha]['peer']  
-                    self.peer.attClock()
-                    clock = self.peer.getClock()
-                    print (f"Atualizando relógio para {clock}")
-                    connection_socket = Message.mensagemDL(self.peer, destinatario, clock, self.peer.arqEncontrados[escolha]['nome'])
-                    if connection_socket: 
-                        self.peer.handleFILE(connection_socket)
+                    self.enviaDL(escolha)
                 else:
                     print("Opção inválida!")
             except ValueError:
