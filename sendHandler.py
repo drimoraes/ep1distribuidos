@@ -60,6 +60,7 @@ class HandlerSend:
         chunk = self.peer.chunk
         indexChunk = 0
         totalChunks = int(tamanho) // chunk + (1 if int(tamanho) % chunk > 0 else 0)
+        chunkList = [None] * totalChunks
         while indexChunk < totalChunks:
             for peerDest in peers:
                 if indexChunk >= totalChunks:
@@ -67,8 +68,11 @@ class HandlerSend:
                 self.peer.attClock()
                 clock = self.peer.getClock()
                 print(f"Atualizando relógio para {clock}")
-                Message.mensagemDL(self.peer, peerDest, clock, nome, chunk, indexChunk)
+                connection_socket = Message.mensagemDL(self.peer, peerDest, clock, nome, chunk, indexChunk)
+                if connection_socket: 
+                    chunkList[indexChunk] = self.peer.handleChunk(connection_socket, indexChunk)
                 indexChunk += 1
+        self.peer.handleFILE(nome, chunkList)
                 
     def buscarArq(self):
         enviados = [] 

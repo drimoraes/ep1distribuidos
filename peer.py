@@ -133,8 +133,11 @@ class Peer:
     def handlePeersList(self, connecSocket):
         self.receive.handlePeersList(connecSocket)
 
-    def handleFILE(self, connecSocket):
-        self.receive.handleFILE(connecSocket)
+    def handleFILE(self, nomeArq, chunkList):
+        self.receive.handleFILE(nomeArq, chunkList)
+        
+    def handleChunk(self, connecSocket, indexChunk):
+        return self.receive.handleChunk(connecSocket, indexChunk)
 
     def handleLSList(self, connecSocket):
         self.receive.handleLSList(connecSocket)
@@ -197,13 +200,14 @@ class Peer:
 
         return conteudo_base64
     
-    def baixarArq(self, arquivo, conteudo):
+    def baixarArq(self, arquivo, chunkList):
         pathEarquivo = os.path.join(self.peerdir, arquivo)
 
         try:
             
             with open(pathEarquivo, 'wb') as f:
-                f.write(base64.b64decode(conteudo))
+                for chunk in chunkList:
+                    f.write(base64.b64decode(chunk))
 
             print(f'Download do {arquivo} finalizado.')
 
