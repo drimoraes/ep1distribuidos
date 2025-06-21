@@ -6,6 +6,8 @@ from receiveHandler import HandlerReceive
 from sendHandler import HandlerSend
 from PeerListHandler import PeerListHandler
 import base64
+from collections import defaultdict
+import statistics
 
 
 class Peer: 
@@ -26,6 +28,7 @@ class Peer:
         self.socket_send = None
         self.escutar()
         self.carregar_peers(arquivotxt)
+        self.stats = defaultdict(lambda: {"temposExec": [], "media": 0, "desvio": 0})
         
     # Verifica se o diretório é valido
     def verificaDir(self, dir):
@@ -116,6 +119,9 @@ class Peer:
     
     def getIpPorta(self):
         return f"{self.getIP()}:{self.getPorta()}"
+    
+    def getChunk(self):
+        return self.chunk
 
     # métodos que encapsulam chamadas de métodos de lógica dos comandos
     def listarPeers(self):
@@ -136,8 +142,8 @@ class Peer:
     def handleFILE(self, nomeArq, chunkList):
         self.receive.handleFILE(nomeArq, chunkList)
         
-    def handleChunk(self, connecSocket, indexChunk):
-        return self.receive.handleChunk(connecSocket, indexChunk)
+    def handleChunk(self, connecSocket):
+        return self.receive.handleChunk(connecSocket)
 
     def handleLSList(self, connecSocket):
         self.receive.handleLSList(connecSocket)
@@ -228,9 +234,24 @@ class Peer:
         if peer not in self.arqEncontrados[chave]:
             self.arqEncontrados[chave].append(peer)
 
-        
+    
+    def atualizaStats(self, n_peers, tam_arq, novo_tempo):
+        chave = (self.getChunk(), n_peers, tam_arq)
+        dados = self.stats[chave]
+        dados["temposExec"].append(novo_tempo)
+        dados["media"] = statistics.mean(dados["temposExec"])
+        dados["desvio"] = (
+            statistics.stdev(dados["temposExec"]) if len(dados["temposExec"]) > 1 else 0.0
+        )
         #for arquivoTam in arquivos_formatados:
         #    print(arquivoTam)
+
+    def imprimirStats(self):
+        print(f"{'Tam. Chunk':<12} | {'N. Peers':<9} | {'Tam. Arquivo':<17} | {'N. Execuções':<14} | {'Tempo Médio (s)':<17} | {'Desvio Padrão (s)':<20}")
+        print("-" * 100)
+        for (chunk, n_peers, tam_arq), dados in self.stats.items():
+            print(f"{chunk:<12} | {n_peers:<9} | {tam_arq:<17} | "
+            f"{len(dados['temposExec']):<14} | {dados['media']:<17.2f}s | {dados['desvio']:<20.2f}")
 
 
     

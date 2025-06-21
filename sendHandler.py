@@ -3,6 +3,7 @@ import threading
 import sys
 import os
 from message import Message
+import time
 
 
 class HandlerSend:
@@ -50,6 +51,7 @@ class HandlerSend:
                 enviados.append(peerDest)
                 
     def enviaDL(self, index):
+        inicio = time.time()
         if not self.peer.arqEncontrados:
             print("Nenhum arquivo encontrado. Por favor, busque arquivos primeiro.")
             return
@@ -70,8 +72,11 @@ class HandlerSend:
                 print(f"Atualizando relógio para {clock}")
                 connection_socket = Message.mensagemDL(self.peer, peerDest, clock, nome, chunk, indexChunk)
                 if connection_socket: 
-                    chunkList[indexChunk] = self.peer.handleChunk(connection_socket, indexChunk)
+                    chunkList[indexChunk] = self.peer.handleChunk(connection_socket)
                 indexChunk += 1
+        final = time.time()
+        tempo = final - inicio
+        self.peer.atualizaStats(len(peers), tamanho, tempo)
         self.peer.handleFILE(nome, chunkList)
                 
     def buscarArq(self):

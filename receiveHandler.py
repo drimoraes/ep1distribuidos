@@ -179,20 +179,9 @@ class HandlerReceive:
 
 
     def handleFILE(self, nome, chunkList):
-        #data_str = self.recv_completo(conn)
-        #origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
-        #arg_formatados = ' '.join(argumentos)
-        #print(f"Resposta recebida: {origem} {clock} {tipo} {arg_formatados}")
-        #
-        #localClock = self.peer.getClock()
-        #newclock = max(localClock, int(clock))
-        #self.peer.attClock2(newclock)
-        #print(f"Atualizando relógio para {self.peer.getClock()}")
-        #self.peer.atualizar_status_peer(origem, "ONLINE")
-
         self.peer.baixarArq(nome, chunkList)
         
-    def handleChunk(self, conn, indexChunk):
+    def handleChunk(self, conn):
         data_str = self.recv_completo(conn)
         origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
         print(f"Resposta recebida: {origem} {clock} {tipo} {argumentos[0]} {argumentos[1]} {argumentos[2]}")
