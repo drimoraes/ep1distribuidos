@@ -251,7 +251,7 @@ class Peer:
         print("-" * 100)
         for (chunk, n_peers, tam_arq), dados in self.stats.items():
             print(f"{chunk:<12} | {n_peers:<9} | {tam_arq:<17} | "
-            f"{len(dados['temposExec']):<14} | {dados['media']:<17.2f}s | {dados['desvio']:<20.2f}")
+            f"{len(dados['temposExec']):<14} | {dados['media']:<17.6f}s | {dados['desvio']:<20.6f}")
 
 
     
