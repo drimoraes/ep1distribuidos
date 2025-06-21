@@ -195,8 +195,7 @@ class HandlerReceive:
     def handleChunk(self, conn, indexChunk):
         data_str = self.recv_completo(conn)
         origem, clock, tipo, argumentos = Message.processarMensagem(data_str)
-        arg_formatados = ' '.join(argumentos)
-        #print(f"Resposta recebida: {origem} {clock} {tipo} {arg_formatados}")
+        print(f"Resposta recebida: {origem} {clock} {tipo} {argumentos[0]} {argumentos[1]} {argumentos[2]}")
         
         localClock = self.peer.getClock()
         newclock = max(localClock, int(clock))

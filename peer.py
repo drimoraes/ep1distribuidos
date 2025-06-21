@@ -195,7 +195,7 @@ class Peer:
 
         with open(pathEarquivo, 'rb') as f:
             f.seek(inicio)
-            conteudo = f.read((fim_ajustado - inicio) + 1)  # fim incluso
+            conteudo = f.read((fim_ajustado - inicio))  # fim incluso
             conteudo_base64 = base64.b64encode(conteudo).decode('utf-8')
 
         return conteudo_base64
