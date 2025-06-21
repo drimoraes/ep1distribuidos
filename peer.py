@@ -191,7 +191,7 @@ class Peer:
         if inicio < 0 or fim < 0 or inicio > fim:
             raise ValueError("Parâmetros inválidos: 'inicio' e 'fim' devem ser positivos e 'inicio' <= 'fim'.")
         
-        fim_ajustado = min(fim, tamanho_arquivo - 1)
+        fim_ajustado = min(fim, tamanho_arquivo)
 
         with open(pathEarquivo, 'rb') as f:
             f.seek(inicio)
